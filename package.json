@@ -1,0 +1,19 @@
+{
+  "name": "bullet",
+  "version": "0.0.1",
+  "description": "fast&furious javascript framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "restore": "npm i"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^7.24.0",
+    "prettier": "^2.2.1",
+    "typescript": "^4.2.4",
+    "webpack": "^5.33.2",
+    "webpack-chain": "^6.5.1"
+  }
+}
