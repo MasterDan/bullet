@@ -3,7 +3,7 @@ module.exports = {
   env: {
     node: true
   },
-  extends: ['eslint:recommended'],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2020
@@ -14,9 +14,16 @@ module.exports = {
     'import/no-unresolved': 'off',
     'quotes': ['error', 'single'],
     'linebreak-style': ['error', 'windows'],
-    '@typescript-eslint/interface-name-prefix': [
+    '@typescript-eslint/naming-convention': [
       'error',
-      { prefixWithI: 'always' }
+      {
+        selector: 'interface',
+        format: ['PascalCase'],
+        custom: {
+          regex: '^I[A-Z]',
+          match: true
+        }
+      }
     ]
   },
   overrides: [

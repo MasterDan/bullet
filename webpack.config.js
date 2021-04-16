@@ -10,6 +10,7 @@ config
   .end()
   .output.path(path.join(__dirname, 'dist','js'))
   .filename('[name].[fullhash].js');
+config.resolve.alias.set('@','./src')
 
 config.devServer
   .contentBase(path.join(__dirname, 'dist'))
