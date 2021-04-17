@@ -9,13 +9,16 @@ export class Reactive<T> {
     return this._value;
   }
   set value(value: T) {
-    this._subscribers.forEach((f) => {
-      f(value, this._value);
-    });
+    this.notifyChanged(value, this._value);
     this._value = value;
   }
   constructor(value: T) {
     this._value = value;
+  }
+  protected notifyChanged(val: T, old?: T): void {
+    this._subscribers.forEach((f) => {
+      f(val, old);
+    });
   }
   subscribe(subscriber: Subscribtion<T>): Token<T> {
     this._subscribers.push(subscriber);
