@@ -9,8 +9,9 @@ export class Reactive<T> {
     return this._value;
   }
   set value(value: T) {
-    this.notifyChanged(value, this._value);
+    const oldVal = this._value;
     this._value = value;
+    this.notifyChanged(value, oldVal);
   }
   constructor(value: T) {
     this._value = value;
