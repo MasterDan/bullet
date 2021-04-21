@@ -1,10 +1,10 @@
-import { removeItem } from '@/tools/array';
+import { Emitter } from './emitter';
 import { Subscribtion } from './subscribtion';
 import { Token } from './token';
 
 export class Reactive<T> {
-  private _value: T;
-  private _subscribers: Subscribtion<T>[] = [];
+  constructor(private _value: T) {}
+  private _emitter: Emitter<T> = new Emitter<T>();
   get value(): T {
     return this._value;
   }
@@ -13,18 +13,10 @@ export class Reactive<T> {
     this._value = value;
     this.notifyChanged(value, oldVal);
   }
-  constructor(value: T) {
-    this._value = value;
-  }
   protected notifyChanged(val: T, old?: T): void {
-    this._subscribers.forEach((f) => {
-      f(val, old);
-    });
+    this._emitter.emit(val, old);
   }
   subscribe(subscriber: Subscribtion<T>): Token<T> {
-    this._subscribers.push(subscriber);
-    return new Token<T>(subscriber, (sub) => {
-      removeItem(this._subscribers, sub);
-    });
+    return this._emitter.subscribe(subscriber);   
   }
 }
