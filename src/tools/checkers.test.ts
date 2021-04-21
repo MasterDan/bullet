@@ -26,5 +26,5 @@ describe('Checkers', () => {
     expect(isObject(fooClassObj)).toBe(true);
     expect(isObject(fooStr)).toBe(false);
     expect(isObject(fooDate)).toBe(false);
-});
+  });
 });
