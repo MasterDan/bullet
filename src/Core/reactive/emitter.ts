@@ -1,4 +1,4 @@
-import { removeItem } from '@/tools/array';
+import { removeItem } from '@/core/tools/array';
 import { Subscribtion } from './subscribtion';
 import { Token } from './token';
 

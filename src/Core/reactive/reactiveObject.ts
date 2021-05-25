@@ -1,4 +1,4 @@
-import { isFunction, isObject } from '@/tools/checkers';
+import { isFunction, isObject } from '@/core/tools/checkers';
 import { Reactive } from './reactive';
 export type SameKeysReactiveValues<T> = { [K in keyof T]: Reactive<T[K]>};
 
