@@ -5,8 +5,20 @@ export function makeObjectReactive<T extends object>(
   o: T
 ): ObjectWithListener<T> {
   const p = new Proxy(new ObjectWithListener(o), {
-    set(target, prop): boolean {
-      return true;
+    set(target, prop, val): boolean {
+      if (prop in target.data) {
+        target._emitters[prop].emit(val, target.data[prop]);
+        target.data[prop] = val;
+        return true;
+      } else {
+        return false;
+      }
+    },
+    get(target, prop) {
+      if (prop in target.data) {
+        return target.data[prop];
+      }
+      return null;
     },
     apply(target, prop, args) {
       return true;
