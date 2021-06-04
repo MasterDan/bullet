@@ -2,12 +2,7 @@ import { Subscribtion } from '../reactive/subscribtion';
 import { makeObjectReactive } from './objectProxy';
 
 class Person {
-  name: string;
-  surname: string;
-  constructor(name: string, surname: string) {
-    this.name = name;
-    this.surname = surname;
-  }
+  constructor(public name: string, public surname: string) {}
 }
 
 describe('reactive object proxy', () => {
