@@ -1,9 +1,12 @@
 import { Emitter } from '../reactive/emitter';
+import { Subscribtion } from '../reactive/subscribtion';
+import { Token } from '../reactive/token';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export function makeObjectReactive<T extends object>(
-  o: T
-): ObjectWithListener<T> {
+type ReactiveProxy<T extends object> = ObjectWithListener<T> & T;
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function makeObjectReactive<T extends object>(o: T): ReactiveProxy<T> {
   const p = new Proxy(new ObjectWithListener(o), {
     set(target, prop, val): boolean {
       if (prop in target.data) {
@@ -18,13 +21,10 @@ export function makeObjectReactive<T extends object>(
       if (prop in target.data) {
         return target.data[prop];
       }
-      return null;
-    },
-    apply(target, prop, args) {
-      return true;
+      return target[prop];
     }
   });
-  return p;
+  return p as ReactiveProxy<T>;
 }
 
 type Emitters<T> = { [K in keyof T]: Emitter<T[K]> };
@@ -40,5 +40,13 @@ class ObjectWithListener<T extends object> {
       emitters['' + key] = new Emitter();
     }
     this._emitters = emitters as Emitters<T>;
+  }
+
+  subscribe(key: keyof T, sub: Subscribtion<T[keyof T]>): Token<T[keyof T]> {
+    if (key in this._emitters) {
+      return this._emitters[key].subscribe(sub);
+    } else {
+      return null;
+    }
   }
 }
