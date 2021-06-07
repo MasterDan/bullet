@@ -1,7 +1,11 @@
 import { Emitter } from '../reactive/emitter';
+import { Subscribtion } from '../reactive/subscribtion';
+import { Token } from '../reactive/token';
 
-export function makeArrayReactive<T>(arr: Array<T>): Array<T> {
-  return (new Proxy(new ArrayWithListeners(arr), {
+export type ReactiveArrayProxy<T> = Array<T> & ArrayWithListeners<T>;
+
+export function makeArrayReactive<T>(arr: Array<T>): ReactiveArrayProxy<T> {
+  return new Proxy(new ArrayWithListeners(arr), {
     set(tgt, prop, val) {
       if (prop in tgt._array) {
         tgt._listeners[prop].emit(val, tgt._array[prop]);
@@ -21,7 +25,7 @@ export function makeArrayReactive<T>(arr: Array<T>): Array<T> {
       }
       return undefined;
     }
-  }) as unknown) as Array<T>;
+  }) as ReactiveArrayProxy<T>;
 }
 
 class ArrayWithListeners<T> {
@@ -38,5 +42,12 @@ class ArrayWithListeners<T> {
     this._listeners.push(emitter);
     this._array.push(arg);
     this._change.emit(this._array);
+  }
+  subscribeElement(key: number, sub: Subscribtion<T>): Token<T> {
+    const emitter = this._listeners[key];
+    return emitter == null ? null : emitter.subscribe(sub);
+  }
+  subscribe(sub: Subscribtion<T[]>): Token<T[]> {
+    return this._change.subscribe(sub);
   }
 }

@@ -3,10 +3,12 @@ import { Subscribtion } from '../reactive/subscribtion';
 import { Token } from '../reactive/token';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type ReactiveProxy<T extends object> = ObjectWithListener<T> & T;
+export type ReactiveObjectProxy<T extends object> = ObjectWithListener<T> & T;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export function makeObjectReactive<T extends object>(o: T): ReactiveProxy<T> {
+export function makeObjectReactive<T extends object>(
+  o: T
+): ReactiveObjectProxy<T> {
   const p = new Proxy(new ObjectWithListener(o), {
     set(target, prop, val): boolean {
       if (prop in target.data) {
@@ -24,7 +26,7 @@ export function makeObjectReactive<T extends object>(o: T): ReactiveProxy<T> {
       return target[prop];
     }
   });
-  return p as ReactiveProxy<T>;
+  return p as ReactiveObjectProxy<T>;
 }
 
 type Emitters<T> = { [K in keyof T]: Emitter<T[K]> };
