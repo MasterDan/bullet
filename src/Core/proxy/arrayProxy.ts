@@ -10,7 +10,7 @@ export function makeArrayReactive<T>(arr: Array<T>): ReactiveArrayProxy<T> {
       if (prop in tgt._array) {
         tgt._listeners[prop].emit(val, tgt._array[prop]);
         tgt._array[prop] = val;
-        tgt._change.emit(this._array);
+        tgt._change.emit(tgt._array);
         return true;
       } else {
         return (tgt[prop] = val);
