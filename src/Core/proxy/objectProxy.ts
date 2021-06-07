@@ -3,7 +3,7 @@ import { Subscribtion } from '../reactive/subscribtion';
 import { Token } from '../reactive/token';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-type ReactiveProxy<T extends object> = ObjectWithListener<T> & T;
+export type ReactiveProxy<T extends object> = ObjectWithListener<T> & T;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function makeObjectReactive<T extends object>(o: T): ReactiveProxy<T> {
