@@ -23,7 +23,7 @@ describe('array tests', () => {
     expect(changeDetector).toEqual(['Pear', 'Orange', 'Pineapple']);
     return undefined;
   });
-  test('Push-Pull-Shift-Unshift', () => {
+  test('Push-Pop-Shift-Unshift', () => {
     const array = makeArrayReactive([12, 3, 15, 21, 25]);
     array.push(12);
     let detector = '';
