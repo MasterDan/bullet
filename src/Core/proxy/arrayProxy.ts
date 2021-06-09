@@ -20,6 +20,10 @@ export function makeArrayReactive<T>(arr: Array<T>): ReactiveArrayProxy<T> {
     get(tgt, prop) {
       if (prop in tgt) {
         return tgt[prop];
+      } else if (typeof tgt._array[prop] === 'function') {
+        return (args) => {
+          tgt._array[prop](...args);
+        };
       } else if (prop in tgt._array) {
         return tgt._array[prop];
       }
@@ -43,6 +47,21 @@ class ArrayWithListeners<T> {
     this._array.push(arg);
     this._change.emit(this._array);
   }
+  pop(): T {
+    this._listeners.pop();
+    return this._array.pop();
+  }
+  unshift(arg: T) {
+    const emitter = new Emitter<T>();
+    this._listeners.unshift(emitter);
+    this._array.unshift(arg);
+    this._change.emit(this._array);
+  }
+  shift(): T {
+    this._listeners.shift();
+    return this._array.shift();
+  }
+
   subscribeElement(key: number, sub: Subscribtion<T>): Token<T> {
     const emitter = this._listeners[key];
     return emitter == null ? null : emitter.subscribe(sub);

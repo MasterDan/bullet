@@ -23,4 +23,16 @@ describe('array tests', () => {
     expect(changeDetector).toEqual(['Pear', 'Orange', 'Pineapple']);
     return undefined;
   });
+  test('Push-Pull-Shift-Unshift', () => {
+    const array = makeArrayReactive([12, 3, 15, 21, 25]);
+    array.push(12);
+    let detector = '';
+    const sub: Subscribtion<number> = jest.fn((val, old) => {
+      detector = `${old}-${val}`;
+    });
+    array.subscribeElement(5, sub);
+    array[5] = 13;
+    expect(sub).toBeCalled();
+    expect(detector).toBe('12-13');
+  });
 });
