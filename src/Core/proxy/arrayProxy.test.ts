@@ -35,4 +35,9 @@ describe('array tests', () => {
     expect(sub).toBeCalled();
     expect(detector).toBe('12-13');
   });
+  test('slice-copy', () => {
+    const array = makeArrayReactive([1, 2, 3]);
+    const copy = array.slice();
+    expect(copy).toEqual([1, 2, 3]);
+  });
 });
