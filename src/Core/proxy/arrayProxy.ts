@@ -40,7 +40,7 @@ class ArrayWithListeners<T> {
     });
   }
   push(...items: T[]): number {
-    this._listeners.push(...items.map(()=>new Emitter<T>()));
+    this._listeners.push(...items.map(() => new Emitter<T>()));
     const result = this._array.push(...items);
     this._change.emit(this._array);
     return result;
@@ -49,9 +49,9 @@ class ArrayWithListeners<T> {
     this._listeners.pop();
     return this._array.pop();
   }
-  unshift(...items: T[]):number {
-    this._listeners.unshift(...items.map(()=>new Emitter<T>()));
-    const result =this._array.unshift(...items);
+  unshift(...items: T[]): number {
+    this._listeners.unshift(...items.map(() => new Emitter<T>()));
+    const result = this._array.unshift(...items);
     this._change.emit(this._array);
     return result;
   }
