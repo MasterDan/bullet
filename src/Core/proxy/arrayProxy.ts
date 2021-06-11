@@ -39,21 +39,21 @@ class ArrayWithListeners<T> {
       this._listeners.push(new Emitter<T>());
     });
   }
-  push(arg: T) {
-    const emitter = new Emitter<T>();
-    this._listeners.push(emitter);
-    this._array.push(arg);
+  push(...items: T[]): number {
+    this._listeners.push(...items.map(()=>new Emitter<T>()));
+    const result = this._array.push(...items);
     this._change.emit(this._array);
+    return result;
   }
   pop(): T {
     this._listeners.pop();
     return this._array.pop();
   }
-  unshift(arg: T) {
-    const emitter = new Emitter<T>();
-    this._listeners.unshift(emitter);
-    this._array.unshift(arg);
+  unshift(...items: T[]):number {
+    this._listeners.unshift(...items.map(()=>new Emitter<T>()));
+    const result =this._array.unshift(...items);
     this._change.emit(this._array);
+    return result;
   }
   shift(): T {
     this._listeners.shift();
