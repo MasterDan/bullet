@@ -50,12 +50,12 @@ describe('array tests', () => {
     array.subscribeElement(0, sub);
     array[0] = 13;
     expect(sub).toBeCalled();
-    expect(detector).toBe('121-13');
+    expect(detector).toBe('12-13');
     array.shift();
     array.unshift(13);
     array[0] = 13;
     expect(sub).toBeCalled();
-    expect(detector).toBe('121-13');
+    expect(detector).toBe('12-13');
   });
   test('slice-copy', () => {
     const array = makeArrayReactive([1, 2, 3]);
