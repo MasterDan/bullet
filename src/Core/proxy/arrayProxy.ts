@@ -1,6 +1,7 @@
 import { Emitter } from '../reactive/emitter';
 import { Subscribtion } from '../reactive/subscribtion';
 import { Token } from '../reactive/token';
+import { isFunction } from '../tools/checkers';
 
 export type ReactiveArrayProxy<T> = Array<T> & ArrayWithListeners<T>;
 
@@ -20,7 +21,7 @@ export function makeArrayReactive<T>(arr: Array<T>): ReactiveArrayProxy<T> {
     get(tgt, prop) {
       if (prop in tgt) {
         return tgt[prop];
-      } else if (typeof tgt._array[prop] === 'function') {
+      } else if (isFunction(tgt._array[prop])) {
         return (...args: unknown[]): unknown => tgt._array[prop](...args);
       } else if (prop in tgt._array) {
         return tgt._array[prop];

@@ -11,12 +11,12 @@ export function makeObjectReactive<T extends object>(
 ): ReactiveObjectProxy<T> {
   const p = new Proxy(new ObjectWithListener(o), {
     set(target, prop, val): boolean {
-      if (prop in target.data) {
+      if (!(prop in target.data && prop in target._emitters)) {
+        return false;
+      } else {
         target._emitters[prop].emit(val, target.data[prop]);
         target.data[prop] = val;
         return true;
-      } else {
-        return false;
       }
     },
     get(target, prop) {
