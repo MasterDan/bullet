@@ -1,7 +1,8 @@
 import { Emitter } from '../reactive/emitter';
 import { Subscribtion } from '../reactive/subscribtion';
 import { Token } from '../reactive/token';
-import { isFunction } from '../tools/checkers';
+import { isArray, isFunction, isObject } from '../tools/checkers';
+import { makeObjectReactive } from './objectProxy';
 
 export type ReactiveArrayProxy<T> = Array<T> & ArrayWithListeners<T>;
 
@@ -9,15 +10,27 @@ export function makeArrayReactive<T>(arr: Array<T>): ReactiveArrayProxy<T> {
   return new Proxy(new ArrayWithListeners(arr), {
     set(tgt, prop, val) {
       if (prop in tgt._array) {
-        tgt._listeners[prop].emit(val, tgt._array[prop]);
-        tgt._array[prop] = val;
-        tgt._change.emit(tgt._array);
-        return true;
+        if (isArray(tgt._array[prop])) {
+          tgt._listeners[prop].emit(val, tgt._array[prop]);
+          tgt._array[prop] = makeArrayReactive(val);
+          tgt._change.emit(tgt._array);
+          return true;
+        } else if (isObject(tgt._array[prop])) {
+          tgt._listeners[prop].emit(val, tgt._array[prop]);
+          tgt._array[prop] = makeObjectReactive(val);
+          tgt._change.emit(tgt._array);
+          return true;
+        } else {
+          tgt._listeners[prop].emit(val, tgt._array[prop]);
+          tgt._array[prop] = val;
+          tgt._change.emit(tgt._array);
+          return true;
+        }
       } else {
-        return (tgt[prop] = val);
+        tgt[prop] = val;
+        return true;
       }
     },
-
     get(tgt, prop) {
       if (prop in tgt) {
         return tgt[prop];
@@ -30,7 +43,6 @@ export function makeArrayReactive<T>(arr: Array<T>): ReactiveArrayProxy<T> {
     }
   }) as ReactiveArrayProxy<T>;
 }
-
 class ArrayWithListeners<T> {
   _listeners: Array<Emitter<T>>;
   _change: Emitter<Array<T>> = new Emitter<Array<T>>();
@@ -60,7 +72,6 @@ class ArrayWithListeners<T> {
     this._listeners.shift();
     return this._array.shift();
   }
-
   subscribeElement(key: number, sub: Subscribtion<T>): Token<T> {
     const emitter = this._listeners[key];
     return emitter == null ? null : emitter.subscribe(sub);
