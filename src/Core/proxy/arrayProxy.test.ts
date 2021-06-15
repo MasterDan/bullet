@@ -1,5 +1,6 @@
 import { Subscribtion } from '../reactive/subscribtion';
-import { makeArrayReactive } from './arrayProxy';
+import { isArray } from '../tools/checkers';
+import { ArrayWithListeners, makeArrayReactive } from './arrayProxy';
 
 describe('array tests', () => {
   test('Change Value Behavior', () => {
@@ -56,6 +57,11 @@ describe('array tests', () => {
     array[0] = 13;
     expect(sub).toBeCalled();
     expect(detector).toBe('12-13');
+  });
+  test('isArray', () => {
+    const array = makeArrayReactive(['one', 'two', 'three']);
+    expect(isArray(array)).toBe(false);
+    expect(array instanceof ArrayWithListeners).toBe(true);
   });
   test('slice-copy', () => {
     const array = makeArrayReactive([1, 2, 3]);

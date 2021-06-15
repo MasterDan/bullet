@@ -2,7 +2,11 @@ import { Emitter } from '../reactive/emitter';
 import { Subscribtion } from '../reactive/subscribtion';
 import { Token } from '../reactive/token';
 import { isArray, isObject } from '../tools/checkers';
-import { makeArrayReactive, ReactiveArrayProxy } from './arrayProxy';
+import {
+  ArrayWithListeners,
+  makeArrayReactive,
+  ReactiveArrayProxy
+} from './arrayProxy';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type ReactiveObjectProxy<T extends object> = ObjectWithListener<T> & T;
@@ -16,14 +20,14 @@ export function makeObjectReactive<T extends object>(
       if (!(prop in target.data) || !(prop in target._emitters)) {
         return false;
       } else {
-        if (isArray(target.data[prop])) {
+        if (target.data[prop] instanceof ArrayWithListeners) {
           target._emitters[prop].emit(
             val,
             (target.data[prop] as ReactiveArrayProxy<unknown>)._array
           );
           target.data[prop] = makeArrayReactive(val);
           return true;
-        } else if (isObject(target.data[prop])) {
+        } else if (target.data[prop] instanceof ObjectWithListener) {
           target._emitters[prop].emit(
             val,
             (target.data[prop] as ReactiveObjectProxy<Record<string, unknown>>)
@@ -51,7 +55,7 @@ export function makeObjectReactive<T extends object>(
 type Emitters<T> = { [K in keyof T]: Emitter<T[K]> };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-class ObjectWithListener<T extends object> {
+export class ObjectWithListener<T extends object> {
   data: T;
   _emitters: Emitters<T>;
   constructor(data: T) {

@@ -36,11 +36,15 @@ describe('reactive object proxy', () => {
       new: []
     };
     const sub: Subscribtion<string[]> = jest.fn((val, oldval?) => {
+      expect(val).toEqual(['Foo', 'Bar', 'Baz']);
+      expect(oldval).not.toBeUndefined();
+      expect(oldval).not.toBeNull();
+      expect(oldval).toEqual(['one', 'two', 'three']);
       (detector.old = oldval), (detector.new = val);
     });
     const token = testObject.subscribe('arr', sub);
     testObject.arr = ['Foo', 'Bar', 'Baz'];
-    expect(sub).toBeCalled(); 
+    expect(sub).toBeCalled();
     expect(detector).toEqual({
       old: ['one', 'two', 'three'],
       new: ['Foo', 'Bar', 'Baz']
