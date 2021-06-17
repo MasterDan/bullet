@@ -1,7 +1,7 @@
 import { Emitter } from '../reactive/emitter';
 import { Subscribtion } from '../reactive/subscribtion';
 import { Token } from '../reactive/token';
-import { isArray, isFunction, isObject } from '../tools/checkers';
+import { isFunction } from '../tools/checkers';
 import { makeObjectReactive, ObjectWithListener } from './objectProxy';
 
 export type ReactiveArrayProxy<T> = Array<T> & ArrayWithListeners<T>;
