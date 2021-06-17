@@ -1,5 +1,5 @@
 import { Subscribtion } from '../reactive/subscribtion';
-import { makeObjectReactive } from './objectProxy';
+import { makeObjectReactive, ReactiveObjectProxy } from './objectProxy';
 
 class Person {
   constructor(public name: string, public surname: string) {}
@@ -61,27 +61,49 @@ describe('reactive object proxy', () => {
     const testobj = makeObjectReactive(
       new Family(new Person('John', 'Doe'), new Person('Jane', 'Doe'))
     );
-    const detector: IChangeDetector<Person> = {
+    const detectorHusband: IChangeDetector<Person> = {
       old: null,
       new: null
     };
-    const sub: Subscribtion<Person> = jest.fn((val: Person, old: Person) => {
-      detector.old = old;
-      detector.new = val;
-    });
-    const token = testobj.subscribe('husband', sub);
+    const objectSub: Subscribtion<Person> = jest.fn(
+      (val: Person, old: Person) => {
+        detectorHusband.old = old;
+        detectorHusband.new = val;
+      }
+    );
+    const objectSubToken = testobj.subscribe('husband', objectSub);
     testobj.husband = new Person('Bradd', 'Pitt');
-    expect(sub).toBeCalled();
-    expect(detector).toEqual({
+    expect(objectSub).toBeCalled();
+    expect(detectorHusband).toEqual({
       old: new Person('John', 'Doe'),
       new: new Person('Bradd', 'Pitt')
     });
-    token.unsubscribe();
+    objectSubToken.unsubscribe();
     testobj.husband = new Person('Tom', 'Cruise');
-    expect(sub).toBeCalled();
-    expect(detector).toEqual({
+    expect(objectSub).toBeCalled();
+    expect(detectorHusband).toEqual({
       old: new Person('John', 'Doe'),
       new: new Person('Bradd', 'Pitt')
     });
+  });
+  test('prop of inner oject subscribe', () => {
+    const testobj = makeObjectReactive(
+      new Family(new Person('John', 'Doe'), new Person('Jane', 'Doe'))
+    );
+    let surnameChangeDetector = '';
+    const sub: Subscribtion<string> = jest.fn((val: string, old: string) => {
+      surnameChangeDetector = `${old}-${val}`;
+    });
+    const token = (testobj.husband as ReactiveObjectProxy<Person>).subscribe(
+      'surname',
+      sub
+    );
+    testobj.husband.surname = 'Smith';
+    expect(sub).toBeCalled();
+    expect(surnameChangeDetector).toBe('Doe-Smith');
+    token.unsubscribe();
+    testobj.husband.surname = 'Joly';
+    expect(sub).toBeCalled();
+    expect(surnameChangeDetector).toBe('Doe-Smith');
   });
 });
