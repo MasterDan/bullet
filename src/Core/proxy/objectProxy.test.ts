@@ -1,4 +1,5 @@
 import { Subscribtion } from '../reactive/subscribtion';
+import { ReactiveArrayProxy } from './arrayProxy';
 import { makeObjectReactive, ReactiveObjectProxy } from './objectProxy';
 
 class Person {
@@ -86,7 +87,7 @@ describe('reactive object proxy', () => {
       new: new Person('Bradd', 'Pitt')
     });
   });
-  test('prop of inner oject subscribe', () => {
+  test('prop of inner oject sub-unsub', () => {
     const testobj = makeObjectReactive(
       new Family(new Person('John', 'Doe'), new Person('Jane', 'Doe'))
     );
@@ -105,5 +106,26 @@ describe('reactive object proxy', () => {
     testobj.husband.surname = 'Joly';
     expect(sub).toBeCalled();
     expect(surnameChangeDetector).toBe('Doe-Smith');
+  });
+  test('prop of inner Array', () => {
+    const testObject = makeObjectReactive({
+      foo: 'bar',
+      arr: ['one', 'two', 'three']
+    });
+    let changeDetector = '';
+    const sub: Subscribtion<string> = jest.fn((val: string, old: string) => {
+      changeDetector = `${old}-${val}`;
+    });
+    const token = (testObject.arr as ReactiveArrayProxy<string>).subscribeElement(
+      1,
+      sub
+    );
+    testObject.arr[1] = 'twenty';
+    expect(sub).toBeCalled();
+    expect(changeDetector).toBe('two-twenty');
+    token.unsubscribe();
+    testObject.arr[1] = 'four';
+    expect(sub).toBeCalled();
+    expect(changeDetector).toBe('two-twenty');
   });
 });
