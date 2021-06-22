@@ -1,7 +1,7 @@
 import { Emitter } from '../reactive/emitter';
 import { Subscribtion } from '../reactive/subscribtion';
 import { Token } from '../reactive/token';
-import { isFunction } from '../tools/checkers';
+import { isArray, isFunction, isObject } from '../tools/checkers';
 import { makeObjectReactive, ObjectWithListener } from './objectProxy';
 
 export type ReactiveArrayProxy<T> = Array<T> & ArrayWithListeners<T>;
@@ -46,7 +46,16 @@ export function makeArrayReactive<T>(arr: Array<T>): ReactiveArrayProxy<T> {
 export class ArrayWithListeners<T> {
   _listeners: Array<Emitter<T>>;
   _change: Emitter<Array<T>> = new Emitter<Array<T>>();
-  constructor(public _array: Array<T>) {
+  _array: Array<T>;
+  constructor(array: Array<T>) {
+    this._array = array.map((el) => {
+      if (isObject(el)) {
+        return makeObjectReactive(el);
+      } else if (isArray(el)) {
+        return makeArrayReactive(el);
+      }
+      return el;
+    }) as Array<T>;
     this._listeners = [];
     this._array.forEach(() => {
       this._listeners.push(new Emitter<T>());

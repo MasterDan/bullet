@@ -128,4 +128,24 @@ describe('reactive object proxy', () => {
     expect(sub).toBeCalled();
     expect(changeDetector).toBe('two-twenty');
   });
+  test('Object in array in object sub-unsub', () => {
+    const testObject = makeObjectReactive({
+      arr: [new Person('John', 'Doe'), new Person('Jane', 'Doe')]
+    });
+    let detector = '';
+    const sub: Subscribtion<string> = jest.fn((val, old) => {
+      detector = `${old}-${val}`;
+    });
+    const token = (testObject.arr[0] as ReactiveObjectProxy<Person>).subscribe(
+      'surname',
+      sub
+    );
+    testObject.arr[0].surname = 'Smith';
+    expect(sub).toBeCalled();
+    expect(detector).toBe('Doe-Smith');
+    token.unsubscribe();
+    testObject.arr[0].surname = 'Johnson';
+    expect(sub).toBeCalled();
+    expect(detector).toBe('Doe-Smith');
+  });
 });
