@@ -18,16 +18,6 @@ interface IBulletNode
     IBulletDirectives,
     IBulletNodeChildren {}
 
-export class BulletNode implements IBulletNode {
-  element: string;
-  attributes: Record<string, string>;
-  directives: Record<string, string>;
-  children: IBulletNode[];
-  static new(ctor: (b: BulletElementBuilder) => BulletNodeBuilder): BulletNode {
-    return ctor(new BulletElementBuilder()).build();
-  }
-}
-
 class BulletElementBuilder implements IBulletElement {
   element: string;
   setElement(name: string): AttributeBuiderEmpty {
@@ -130,5 +120,15 @@ class BulletNodeBuilder implements IBulletNodeChildren {
     node.directives = this.dirBuilder.directives;
     node.children = this.children;
     return node;
+  }
+}
+
+export class BulletNode implements IBulletNode {
+  element: string;
+  attributes: Record<string, string>;
+  directives: Record<string, string>;
+  children: IBulletNode[];
+  static new(ctor: (b: BulletElementBuilder) => BulletNodeBuilder): BulletNode {
+    return ctor(new BulletElementBuilder()).build();
   }
 }
