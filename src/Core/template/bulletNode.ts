@@ -18,14 +18,17 @@ interface IBulletNode
     IBulletDirectives,
     IBulletNodeChildren {}
 
-class BulletNode implements IBulletNode {
+export class BulletNode implements IBulletNode {
   element: string;
   attributes: Record<string, string>;
   directives: Record<string, string>;
   children: IBulletNode[];
+  static new(ctor: (b: BulletElementBuilder) => BulletNodeBuilder): BulletNode {
+    return ctor(new BulletElementBuilder()).build();
+  }
 }
 
-class BulletElemetBuilder implements IBulletElement {
+class BulletElementBuilder implements IBulletElement {
   element: string;
   setElement(name: string): AttributeBuiderEmpty {
     this.element = name;
@@ -33,8 +36,13 @@ class BulletElemetBuilder implements IBulletElement {
   }
 }
 
-class AttributeBuiderEmpty {
-  constructor(public elembuilder: BulletElemetBuilder) {}
+interface IAttributeBuilder {
+  setAttribute(name: string, value: string): AttributeBuilder;
+  setAttributes(attributes: Record<string, string>): AttributeBuilder;
+}
+
+class AttributeBuiderEmpty implements IAttributeBuilder {
+  constructor(public elembuilder: BulletElementBuilder) {}
   setAttribute(name: string, value: string): AttributeBuilder {
     const builder = new AttributeBuilder(this.elembuilder);
     builder.setAttribute(name, value);
@@ -50,9 +58,9 @@ class AttributeBuiderEmpty {
   }
 }
 
-class AttributeBuilder implements IBulletAttributes {
+class AttributeBuilder implements IBulletAttributes, IAttributeBuilder {
   attributes: Record<string, string> = {};
-  constructor(public elembuilder: BulletElemetBuilder) {}
+  constructor(public elembuilder: BulletElementBuilder) {}
   setAttribute(name: string, value: string): AttributeBuilder {
     this.attributes[name] = value;
     return this;
@@ -66,7 +74,12 @@ class AttributeBuilder implements IBulletAttributes {
   }
 }
 
-class DirectiveBuilderEmpty implements IBulletDirectives {
+interface IDirectiveBuilder {
+  setDirective(name: string, value: string): DirectiveBuilder;
+  setDirectives(directives: Record<string, string>): DirectiveBuilder;
+}
+
+class DirectiveBuilderEmpty implements IBulletDirectives, IDirectiveBuilder {
   directives: Record<string, string>;
   constructor(public attrsBuilder: AttributeBuilder) {}
   setDirective(name: string, value: string): DirectiveBuilder {
@@ -84,8 +97,8 @@ class DirectiveBuilderEmpty implements IBulletDirectives {
   }
 }
 
-class DirectiveBuilder implements IBulletDirectives {
-  directives: Record<string, string>;
+class DirectiveBuilder implements IBulletDirectives, IDirectiveBuilder {
+  directives: Record<string, string> = {};
   constructor(public attrsBuilder: AttributeBuilder) {}
   setDirective(name: string, value: string): DirectiveBuilder {
     this.directives[name] = value;
@@ -101,16 +114,21 @@ class DirectiveBuilder implements IBulletDirectives {
 }
 
 class BulletNodeBuilder implements IBulletNodeChildren {
-  children: IBulletNode[];
+  children: IBulletNode[] = [];
   constructor(public dirBuilder: DirectiveBuilder) {}
-  addChild() {
-    const elembuilder = new BulletElemetBuilder();
+  addChild(
+    ctor: (builder: BulletElementBuilder) => BulletNodeBuilder
+  ): BulletNodeBuilder {
+    const elembuilder = new BulletElementBuilder();
+    this.children.push(ctor(elembuilder).build());
+    return this;
   }
   build(): BulletNode {
     const node = new BulletNode();
     node.element = this.dirBuilder.attrsBuilder.elembuilder.element;
     node.attributes = this.dirBuilder.attrsBuilder.attributes;
     node.directives = this.dirBuilder.directives;
+    node.children = this.children;
     return node;
   }
 }
