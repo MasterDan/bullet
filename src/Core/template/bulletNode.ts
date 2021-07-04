@@ -1,3 +1,5 @@
+import { isEmpty } from '../tools/array';
+
 interface IBulletElement {
   element: string;
 }
@@ -16,7 +18,9 @@ interface IBulletNode
   extends IBulletElement,
     IBulletAttributes,
     IBulletDirectives,
-    IBulletNodeChildren {}
+    IBulletNodeChildren {
+  draw(): string;
+}
 
 class BulletElementBuilder implements IBulletElement {
   element: string;
@@ -130,5 +134,21 @@ export class BulletNode implements IBulletNode {
   children: IBulletNode[];
   static new(ctor: (b: BulletElementBuilder) => BulletNodeBuilder): BulletNode {
     return ctor(new BulletElementBuilder()).build();
+  }
+  draw(): string {
+    if (this.element == null) {
+      throw new Error('Cannot Draw empty node');
+    }
+    const attributes = [];
+    for (const key in this.attributes) {
+      attributes.push(`"${key}"=${this.attributes[key]}`);
+    }
+    if (isEmpty(this.children)) {
+      return `<${this.element} ${attributes.join(' ')}/>`;
+    } else {
+      return `<${this.element} ${attributes.join(
+        ' '
+      )}>${this.children.map((c) => c.draw())}</${this.element}>`;
+    }
   }
 }
