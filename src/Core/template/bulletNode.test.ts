@@ -10,4 +10,21 @@ describe('Bullet Node', () => {
     expect(node.directives).toEqual({});
     expect(node.children).toEqual([]);
   });
+  test('EmtyDraw', () => {
+    const node = BulletNode.new((b) =>
+      b.setElement('div').setAttribute('class', 'cls').next().noDirectives()
+    );
+    expect(node.draw()).toBe('<div class="cls"/>');
+  });
+  test('Draw With Children', () => {
+    const node = BulletNode.new((b) =>
+      b
+        .setElement('div')
+        .setAttribute('class', 'cls')
+        .next()
+        .noDirectives()
+        .addChild((b) => b.setElement('span').noAttributes().noDirectives())
+    );
+    expect(node.draw()).toBe('<div class="cls"><span /></div>');
+  });
 });

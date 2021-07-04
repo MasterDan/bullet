@@ -141,7 +141,7 @@ export class BulletNode implements IBulletNode {
     }
     const attributes = [];
     for (const key in this.attributes) {
-      attributes.push(`"${key}"=${this.attributes[key]}`);
+      attributes.push(`${key}="${this.attributes[key]}"`);
     }
     if (isEmpty(this.children)) {
       return `<${this.element} ${attributes.join(' ')}/>`;
