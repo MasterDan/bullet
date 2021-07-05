@@ -14,7 +14,7 @@ describe('Bullet Node', () => {
     const node = BulletNode.new((b) =>
       b.setElement('div').setAttribute('class', 'cls').next().noDirectives()
     );
-    expect(node.draw()).toBe('<div class="cls"/>');
+    expect(node.draw()).toBe('<div class="cls"></div>');
   });
   test('Draw With Children', () => {
     const node = BulletNode.new((b) =>
@@ -25,6 +25,6 @@ describe('Bullet Node', () => {
         .noDirectives()
         .addChild((b) => b.setElement('span').noAttributes().noDirectives())
     );
-    expect(node.draw()).toBe('<div class="cls"><span /></div>');
+    expect(node.draw()).toBe('<div class="cls"><span></span></div>');
   });
 });

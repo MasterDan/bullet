@@ -1,4 +1,5 @@
 import { isEmpty } from '../tools/array';
+import { emptyTags } from './tags';
 
 interface IBulletElement {
   element: string;
@@ -139,16 +140,19 @@ export class BulletNode implements IBulletNode {
     if (this.element == null) {
       throw new Error('Cannot Draw empty node');
     }
-    const attributes = [];
+    const attributesArray = [];
     for (const key in this.attributes) {
-      attributes.push(`${key}="${this.attributes[key]}"`);
+      attributesArray.push(`${key}="${this.attributes[key]}"`);
     }
-    if (isEmpty(this.children)) {
-      return `<${this.element} ${attributes.join(' ')}/>`;
+    const attributes = isEmpty(attributesArray)
+      ? ''
+      : ' ' + attributesArray.join(' ');
+    if (emptyTags.some((t) => t === this.element)) {
+      return `<${this.element}${attributes}/>`;
     } else {
-      return `<${this.element} ${attributes.join(
-        ' '
-      )}>${this.children.map((c) => c.draw())}</${this.element}>`;
+      return `<${this.element}${attributes}>${this.children.map((c) =>
+        c.draw()
+      )}</${this.element}>`;
     }
   }
 }
