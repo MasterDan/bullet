@@ -5,6 +5,10 @@ interface IBulletElement {
   element: string;
 }
 
+interface IBulletTextNode {
+  text: string;
+}
+
 interface IBulletAttributes {
   attributes: Record<string, string>;
 }
@@ -19,15 +23,30 @@ interface IBulletNode
   extends IBulletElement,
     IBulletAttributes,
     IBulletDirectives,
-    IBulletNodeChildren {
+    IBulletNodeChildren,
+    IBulletTextNode {
   draw(): string;
 }
 
-class BulletElementBuilder implements IBulletElement {
+class BulletElementBuilder implements IBulletElement, IBulletTextNode {
+  text: string;
   element: string;
   setElement(name: string): AttributeBuiderEmpty {
     this.element = name;
     return new AttributeBuiderEmpty(this);
+  }
+  setText(text: string): BulletTextBuilder {
+    this.text = text;
+    return new BulletTextBuilder(this);
+  }
+}
+
+class BulletTextBuilder {
+  constructor(public elemBuilder: BulletElementBuilder) {}
+  build(): IBulletNode {
+    const node = new BulletNode();
+    node.text = this.elemBuilder.text;
+    return node;
   }
 }
 
@@ -112,7 +131,9 @@ class BulletNodeBuilder implements IBulletNodeChildren {
   children: IBulletNode[] = [];
   constructor(public dirBuilder: DirectiveBuilder) {}
   addChild(
-    ctor: (builder: BulletElementBuilder) => BulletNodeBuilder
+    ctor: (
+      builder: BulletElementBuilder
+    ) => BulletNodeBuilder | BulletTextBuilder
   ): BulletNodeBuilder {
     const elembuilder = new BulletElementBuilder();
     this.children.push(ctor(elembuilder).build());
@@ -129,14 +150,20 @@ class BulletNodeBuilder implements IBulletNodeChildren {
 }
 
 export class BulletNode implements IBulletNode {
+  text: string;
   element: string;
   attributes: Record<string, string>;
   directives: Record<string, string>;
   children: IBulletNode[];
-  static new(ctor: (b: BulletElementBuilder) => BulletNodeBuilder): BulletNode {
+  static new(
+    ctor: (b: BulletElementBuilder) => BulletNodeBuilder | BulletTextBuilder
+  ): BulletNode {
     return ctor(new BulletElementBuilder()).build();
   }
   draw(): string {
+    if (this.text != null) {
+      return this.text;
+    }
     if (this.element == null) {
       throw new Error('Cannot Draw empty node');
     }
