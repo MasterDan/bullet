@@ -1,7 +1,7 @@
 import { BulletNode } from './bulletNode';
 import { JSDOM } from 'jsdom';
 
-function parseHtml(html: string): BulletNode[] {
+export function parseHtml(html: string): BulletNode[] {
   const jd = new JSDOM(html);
   return ParseHtmlCollection(jd.window.document.body.children);
 }
