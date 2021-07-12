@@ -27,22 +27,3 @@ function ParseNodes(nodes: NodeListOf<ChildNode>): BulletNode[] {
   }
   return result;
 }
-
-function ParseHtmlCollection(col: HTMLCollection): BulletNode[] {
-  const result: BulletNode[] = [];
-  for (const item of col) {
-    const node = BulletNode.new((builder) => {
-      const result = builder
-        .setElement(item.tagName.toLowerCase())
-        .noAttributes()
-        .noDirectives();
-      const children = ParseHtmlCollection(item.children);
-      for (const child of children) {
-        result.children.push(child);
-      }
-      return result;
-    });
-    result.push(node);
-  }
-  return result;
-}
