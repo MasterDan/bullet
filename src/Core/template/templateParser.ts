@@ -17,20 +17,29 @@ function ParseNodes(nodes: NodeListOf<ChildNode>): BulletNode[] {
     const node = nodes[i];
     if (node.nodeName === '#text') {
       if (!isNullOrWhiteSpace(node.nodeValue)) {
-        result.push(BulletNode.new((b) => b.setText(node.nodeValue.trim())));
+        result.push(
+          BulletNode.new((b) => {
+            return b.setText(node.nodeValue.trim());
+          })
+        );
       }
     } else if (isHtmlElement(node)) {
-      const bulletNode = BulletNode.new((b) =>
-        b.setElement(node.nodeName.toLowerCase()).setAttributes((ab) => {
-          for (const attr of node.attributes) {
-            ab.add(attr.nodeName, attr.nodeValue);
-          }
-        })
+      result.push(
+        BulletNode.new((builder) =>
+          builder
+            .setElement(node.nodeName.toLowerCase())
+            .setAttributes((ab) => {
+              for (const attr of node.attributes) {
+                ab.add(attr.nodeName, attr.nodeValue);
+              }
+            })
+            .setChildren((cb) => {
+              ParseNodes(node.childNodes).forEach((bn) => {
+                cb.addNode(bn);
+              });
+            })
+        )
       );
-      ParseNodes(node.childNodes).forEach((bn) => {
-        bulletNode.children.push(bn);
-      });
-      result.push(bulletNode);
     }
   }
   return result;
