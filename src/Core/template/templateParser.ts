@@ -1,8 +1,4 @@
-import {
-  AttributeBuiderEmpty,
-  AttributeBuilder,
-  BulletNode
-} from './bulletNode';
+import { BulletNode } from './bulletNode';
 import { JSDOM } from 'jsdom';
 import { isNullOrWhiteSpace } from '../tools/string';
 
@@ -24,15 +20,13 @@ function ParseNodes(nodes: NodeListOf<ChildNode>): BulletNode[] {
         result.push(BulletNode.new((b) => b.setText(node.nodeValue.trim())));
       }
     } else if (isHtmlElement(node)) {
-      const bulletNode = BulletNode.new((b) => {
-        let eb: AttributeBuiderEmpty | AttributeBuilder = b.setElement(
-          node.nodeName.toLowerCase()
-        );
-        for (const attr of node.attributes) {
-          eb = eb.setAttribute(attr.nodeName, attr.nodeValue);
-        }
-        return (eb as AttributeBuilder).next().noDirectives();
-      });
+      const bulletNode = BulletNode.new((b) =>
+        b.setElement(node.nodeName.toLowerCase()).setAttributes((ab) => {
+          for (const attr of node.attributes) {
+            ab.add(attr.nodeName, attr.nodeValue);
+          }
+        })
+      );
       ParseNodes(node.childNodes).forEach((bn) => {
         bulletNode.children.push(bn);
       });

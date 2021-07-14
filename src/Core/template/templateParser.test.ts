@@ -13,30 +13,22 @@ describe('html parse tests', () => {
     );
     expect(nodes).toEqual([
       BulletNode.new((builder) =>
-        builder
-          .setElement('div')
-          .noAttributes()
-          .noDirectives()
-          .addChild((builder) =>
-            builder
-              .setElement('span')
-              .noAttributes()
-              .noDirectives()
-              .addChild((b) => b.setText('Hello'))
+        builder.setElement('div').setChildren((b) =>
+          b.add((builder) =>
+            builder.setElement('span').setChildren((b) => {
+              return b.add((b) => b.setText('Hello'));
+            })
           )
+        )
       ),
       BulletNode.new((builder) =>
-        builder
-          .setElement('div')
-          .noAttributes()
-          .noDirectives()
-          .addChild((builder) =>
-            builder
-              .setElement('span')
-              .noAttributes()
-              .noDirectives()
-              .addChild((b) => b.setText('World'))
+        builder.setElement('div').setChildren((b) =>
+          b.add((builder) =>
+            builder.setElement('span').setChildren((b) => {
+              return b.add((b) => b.setText('World'));
+            })
           )
+        )
       )
     ]);
   });
@@ -51,32 +43,24 @@ describe('html parse tests', () => {
        </div>`
     );
     expect(nodes).toEqual([
-      BulletNode.new((builder) =>
-        builder
-          .setElement('div')
-          .noAttributes()
-          .noDirectives()
-          .addChild((builder) =>
-            builder
-              .setElement('span')
-              .noAttributes()
-              .noDirectives()
-              .addChild((b) => b.setText('Hello'))
+      BulletNode.new((divBuilder) =>
+        divBuilder.setElement('div').setChildren((b) =>
+          b.add((spanBuilder) =>
+            spanBuilder.setElement('span').setChildren((b) => {
+              return b.add((b) => b.setText('Hello'));
+            })
           )
+        )
       ),
       BulletNode.new((b) => b.setText('Some Text Between')),
-      BulletNode.new((builder) =>
-        builder
-          .setElement('div')
-          .noAttributes()
-          .noDirectives()
-          .addChild((builder) =>
-            builder
-              .setElement('span')
-              .noAttributes()
-              .noDirectives()
-              .addChild((b) => b.setText('World'))
+      BulletNode.new((divBuilder) =>
+        divBuilder.setElement('div').setChildren((cb) =>
+          cb.add((spanBuilder) =>
+            spanBuilder.setElement('span').setChildren((b) => {
+              return b.add((b) => b.setText('World'));
+            })
           )
+        )
       )
     ]);
   });
