@@ -55,7 +55,7 @@ interface IAttributeBuilder {
   setAttributes(attributes: Record<string, string>): AttributeBuilder;
 }
 
-class AttributeBuiderEmpty implements IAttributeBuilder {
+export class AttributeBuiderEmpty implements IAttributeBuilder {
   constructor(public elembuilder: BulletElementBuilder) {}
   setAttribute(name: string, value: string): AttributeBuilder {
     const builder = new AttributeBuilder(this.elembuilder);
@@ -72,7 +72,7 @@ class AttributeBuiderEmpty implements IAttributeBuilder {
   }
 }
 
-class AttributeBuilder implements IBulletAttributes, IAttributeBuilder {
+export class AttributeBuilder implements IBulletAttributes, IAttributeBuilder {
   attributes: Record<string, string> = {};
   constructor(public elembuilder: BulletElementBuilder) {}
   setAttribute(name: string, value: string): AttributeBuilder {
@@ -93,7 +93,8 @@ interface IDirectiveBuilder {
   setDirectives(directives: Record<string, string>): DirectiveBuilder;
 }
 
-class DirectiveBuilderEmpty implements IBulletDirectives, IDirectiveBuilder {
+export class DirectiveBuilderEmpty
+  implements IBulletDirectives, IDirectiveBuilder {
   directives: Record<string, string>;
   constructor(public attrsBuilder: AttributeBuilder) {}
   setDirective(name: string, value: string): DirectiveBuilder {
@@ -111,7 +112,7 @@ class DirectiveBuilderEmpty implements IBulletDirectives, IDirectiveBuilder {
   }
 }
 
-class DirectiveBuilder implements IBulletDirectives, IDirectiveBuilder {
+export class DirectiveBuilder implements IBulletDirectives, IDirectiveBuilder {
   directives: Record<string, string> = {};
   constructor(public attrsBuilder: AttributeBuilder) {}
   setDirective(name: string, value: string): DirectiveBuilder {
