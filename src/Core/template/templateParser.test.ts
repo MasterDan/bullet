@@ -12,26 +12,26 @@ describe('html parse tests', () => {
        </div>`
     );
     expect(nodes).toEqual([
-      BulletNode.new((b) =>
-        b
+      BulletNode.new((builder) =>
+        builder
           .setElement('div')
           .noAttributes()
           .noDirectives()
-          .addChild((b) =>
-            b
+          .addChild((builder) =>
+            builder
               .setElement('span')
               .noAttributes()
               .noDirectives()
               .addChild((b) => b.setText('Hello'))
           )
       ),
-      BulletNode.new((b) =>
-        b
+      BulletNode.new((builder) =>
+        builder
           .setElement('div')
           .noAttributes()
           .noDirectives()
-          .addChild((b) =>
-            b
+          .addChild((builder) =>
+            builder
               .setElement('span')
               .noAttributes()
               .noDirectives()
@@ -51,13 +51,13 @@ describe('html parse tests', () => {
        </div>`
     );
     expect(nodes).toEqual([
-      BulletNode.new((b) =>
-        b
+      BulletNode.new((builder) =>
+        builder
           .setElement('div')
           .noAttributes()
           .noDirectives()
-          .addChild((b) =>
-            b
+          .addChild((builder) =>
+            builder
               .setElement('span')
               .noAttributes()
               .noDirectives()
@@ -65,13 +65,13 @@ describe('html parse tests', () => {
           )
       ),
       BulletNode.new((b) => b.setText('Some Text Between')),
-      BulletNode.new((b) =>
-        b
+      BulletNode.new((builder) =>
+        builder
           .setElement('div')
           .noAttributes()
           .noDirectives()
-          .addChild((b) =>
-            b
+          .addChild((builder) =>
+            builder
               .setElement('span')
               .noAttributes()
               .noDirectives()
