@@ -39,7 +39,7 @@ describe('html parse tests', () => {
        </div>
        Some Text Between
        <div>
-        <span>World</span>
+        <span class="cls" >World</span>
        </div>`
     );
     expect(nodes).toEqual([
@@ -56,9 +56,12 @@ describe('html parse tests', () => {
       BulletNode.new((divBuilder) =>
         divBuilder.setElement('div').setChildren((cb) =>
           cb.add((spanBuilder) =>
-            spanBuilder.setElement('span').setChildren((b) => {
-              return b.add((b) => b.setText('World'));
-            })
+            spanBuilder
+              .setElement('span')
+              .setAttributes((ab) => ab.add('class', 'cls'))
+              .setChildren((b) => {
+                return b.add((b) => b.setText('World'));
+              })
           )
         )
       )
