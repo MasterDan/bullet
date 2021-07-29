@@ -26,7 +26,9 @@ export class ComponentInterfaceCustom extends ComponentInterface {
     super(def.props, def.emits);
   }
 }
-
+/**
+ * Проверяем, что у двух компонентов одинаковые Свойства и одинаковые возможные события
+ */
 function compareInterfaces(
   first: IComponentInterface,
   second: IComponentInterface
