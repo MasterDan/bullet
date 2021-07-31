@@ -1,4 +1,4 @@
-import { ComponentInterfaceCustom } from './ComponentInterface';
+import { ComponentInterfaceCustom } from './сomponentInterface';
 
 describe('Component Interface tests', () => {
   test('Compare', () => {

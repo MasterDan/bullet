@@ -1,6 +1,6 @@
 import { ReactiveObjectProxy } from '../proxy/objectProxy';
 import { BulletRootNode } from '../template/bulletRootNode';
-import { ComponentInterface } from './ComponentInterface';
+import { ComponentInterface } from './сomponentInterface';
 export class BulletComponent<
   // eslint-disable-next-line @typescript-eslint/ban-types
   TObj extends object
