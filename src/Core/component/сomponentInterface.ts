@@ -1,28 +1,42 @@
 import { Emitter } from '../reactive/emitter';
 import { sameKeys } from '../tools/object';
 
-export interface IComponentInterface {
-  props: Record<string, unknown>;
-  emits: Record<string, Emitter<unknown>>;
+export interface IComponentInterface<
+  TProps extends Record<string, unknown>,
+  TEmits extends Record<string, Emitter<unknown>>
+> {
+  props: TProps;
+  emits: TEmits;
 }
 
-export class ComponentInterface implements IComponentInterface {
-  constructor(
-    public props: Record<string, unknown>,
-    public emits: Record<string, Emitter<unknown>>
-  ) {}
-  compareWith(other: ComponentInterface): boolean {
+export class ComponentInterface<
+  TProps extends Record<string, unknown>,
+  TEmits extends Record<string, Emitter<unknown>>
+> implements IComponentInterface<TProps, TEmits> {
+  constructor(public props: TProps, public emits: TEmits) {}
+  compareWith(
+    other: ComponentInterface<
+      Record<string, unknown>,
+      Record<string, Emitter<unknown>>
+    >
+  ): boolean {
     return compareInterfaces(this, other);
   }
 }
-export class ComponentInterfaceEmpty extends ComponentInterface {
+export class ComponentInterfaceEmpty extends ComponentInterface<
+  Record<string, unknown>,
+  Record<string, Emitter<unknown>>
+> {
   constructor() {
     super({}, {});
   }
 }
 
-export class ComponentInterfaceCustom extends ComponentInterface {
-  constructor(def: IComponentInterface) {
+export class ComponentInterfaceCustom<
+  TProps extends Record<string, unknown>,
+  TEmits extends Record<string, Emitter<unknown>>
+> extends ComponentInterface<TProps, TEmits> {
+  constructor(def: IComponentInterface<TProps, TEmits>) {
     super(def.props, def.emits);
   }
 }
@@ -30,8 +44,14 @@ export class ComponentInterfaceCustom extends ComponentInterface {
  * Проверяем, что у двух компонентов одинаковые Свойства и одинаковые возможные события
  */
 function compareInterfaces(
-  first: IComponentInterface,
-  second: IComponentInterface
+  first: IComponentInterface<
+    Record<string, unknown>,
+    Record<string, Emitter<unknown>>
+  >,
+  second: IComponentInterface<
+    Record<string, unknown>,
+    Record<string, Emitter<unknown>>
+  >
 ): boolean {
   return (
     sameKeys(first.props, second.props) && sameKeys(first.emits, second.emits)
