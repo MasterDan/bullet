@@ -1,5 +1,6 @@
 import { Emitter } from '../reactive/emitter';
 import { BulletRootNode } from '../template/bulletRootNode';
+import { isNullOrWhiteSpace } from '../tools/string';
 import {
   ComponentInterface,
   ComponentInterfaceCustom,
@@ -15,6 +16,32 @@ export class Component<
   setup(arg: ComponentInterface<TProps, TEmits>): Record<string, unknown> {
     return {};
   }
+  static create<
+    TProps extends Record<string, unknown>,
+    TEmits extends Record<string, Emitter<unknown>>
+  >(
+    setupArg: IComponentSetup<TProps, TEmits>
+  ): BulletConstructor<TProps, TEmits> {
+    return class extends Component<TProps, TEmits> {
+      __template = isNullOrWhiteSpace(setupArg.template)
+        ? null
+        : BulletRootNode.fromHtml(setupArg.template);
+      __interface =
+        setupArg.definition instanceof ComponentInterface
+          ? setupArg.definition
+          : new ComponentInterfaceCustom(setupArg.definition);
+      setup = setupArg.setup;
+    };
+  }
+}
+
+export interface IComponentSetup<
+  TProps extends Record<string, unknown>,
+  TEmits extends Record<string, Emitter<unknown>>
+> {
+  template?: string;
+  definition: IComponentInterface<TProps, TEmits>;
+  setup: (def: IComponentInterface<TProps, TEmits>) => Record<string, unknown>;
 }
 
 export type BulletConstructor<
@@ -31,22 +58,6 @@ export function template<
   ): BulletConstructor<TProps, TEmits> => {
     return class extends ctor {
       __template = BulletRootNode.fromHtml(html);
-    };
-  };
-}
-
-export function implement<
-  TProps extends Record<string, unknown>,
-  TEmits extends Record<string, Emitter<unknown>>
->(inter: IComponentInterface<TProps, TEmits>) {
-  return (
-    ctor: BulletConstructor<TProps, TEmits>
-  ): BulletConstructor<TProps, TEmits> => {
-    return class extends ctor {
-      __interface =
-        inter instanceof ComponentInterface
-          ? inter
-          : new ComponentInterfaceCustom(inter);
     };
   };
 }

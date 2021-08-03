@@ -3,24 +3,24 @@ const Config = require('webpack-chain');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
-const confBuilder = new Config();
+const webpack = new Config();
 
-confBuilder
+webpack
   .entry('index')
   .add('./src/index.ts')
   .end()
   .output.path(path.join(__dirname, 'dist', 'js'))
   .filename('[name].[fullhash].js');
-confBuilder.resolve.alias.set('@', './src');
+webpack.resolve.alias.set('@', './src');
 
-confBuilder.devServer
+webpack.devServer
   .contentBase(path.join(__dirname, 'dist'))
   .compress(true)
   .port(9000);
 
-confBuilder.devtool('source-map');
+webpack.devtool('source-map');
 
-confBuilder.module
+webpack.module
   .rule('javascript')
   .test(/\.jsx?$/)
   .exclude.add('/node_modules/')
@@ -31,7 +31,7 @@ confBuilder.module
     presets: ['@babel/preset-env']
   });
 
-confBuilder.module
+webpack.module
   .rule('typescript')
   .test(/\.tsx?$/)
   .exclude.add('/node_modules/')
@@ -39,12 +39,12 @@ confBuilder.module
   .use('typescript')
   .loader('ts-loader');
 
-confBuilder.plugin('clean').use(CleanWebpackPlugin);
-confBuilder.plugin('html').use(HtmlWebpackPlugin, [
+webpack.plugin('clean').use(CleanWebpackPlugin);
+webpack.plugin('html').use(HtmlWebpackPlugin, [
   {
     template: 'public/index.html',
     filename: '../index.html'
   }
 ]);
 
-module.exports = confBuilder.toConfig();
+module.exports = webpack.toConfig();
