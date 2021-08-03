@@ -11,7 +11,7 @@ webpack
   .end()
   .output.path(path.join(__dirname, 'dist', 'js'))
   .filename('[name].[fullhash].js');
-webpack.resolve.alias.set('@', './src');
+webpack.resolve.alias.set('@', './src').end().extensions.add('.js').add('.ts');
 
 webpack.devServer
   .contentBase(path.join(__dirname, 'dist'))
