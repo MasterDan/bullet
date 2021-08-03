@@ -1,4 +1,4 @@
-import { Component, template } from '../component';
+import { Component } from '../component';
 
 export const componentForTests = Component.create({
   template: '<div>Hello from Test</div>',

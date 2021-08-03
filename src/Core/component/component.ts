@@ -48,16 +48,3 @@ export type BulletConstructor<
   TProps extends Record<string, unknown>,
   TEmits extends Record<string, Emitter<unknown>>
 > = new (...args) => Component<TProps, TEmits>;
-
-export function template<
-  TProps extends Record<string, unknown>,
-  TEmits extends Record<string, Emitter<unknown>>
->(html: string) {
-  return (
-    ctor: BulletConstructor<TProps, TEmits>
-  ): BulletConstructor<TProps, TEmits> => {
-    return class extends ctor {
-      __template = BulletRootNode.fromHtml(html);
-    };
-  };
-}
