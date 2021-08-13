@@ -15,6 +15,8 @@ webpack.resolve.alias.set('@', './src').end().extensions.add('.js').add('.ts');
 
 webpack.devServer
   .contentBase(path.join(__dirname, 'dist'))
+  .hot(true)
+  .writeToDisk(true)
   .compress(true)
   .port(9000);
 

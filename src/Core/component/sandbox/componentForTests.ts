@@ -1,7 +1,7 @@
 import { Component } from '../component';
 
 export const componentForTests = Component.create({
-  template: '<div>Hello from Test</div>',
+  template: '<div>Hello from Test, Yeah</div>',
   definition: {
     props: {
       message: 'some message'
