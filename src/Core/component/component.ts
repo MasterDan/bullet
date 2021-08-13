@@ -1,5 +1,6 @@
 import { Emitter } from '../reactive/emitter';
 import { BulletRootNode } from '../template/bulletRootNode';
+import { ClassicDomParser } from '../template/stringParsers/ClassicDomParser';
 import { isNullOrWhiteSpace } from '../tools/string';
 import {
   ComponentInterface,
@@ -25,7 +26,9 @@ export class Component<
     return class extends Component<TProps, TEmits> {
       __template = isNullOrWhiteSpace(setupArg.template)
         ? null
-        : BulletRootNode.fromHtml(setupArg.template);
+        : BulletRootNode.create(new ClassicDomParser()).fromHtml(
+            setupArg.template
+          );
       __interface =
         setupArg.definition instanceof ComponentInterface
           ? setupArg.definition

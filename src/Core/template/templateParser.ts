@@ -1,10 +1,13 @@
 import { BulletNode } from './bulletNode';
-import { JSDOM } from 'jsdom';
 import { isNullOrWhiteSpace } from '../tools/string';
+import { IDomParser } from './stringParsers/types';
 
-export function parseHtml(html: string): BulletNode[] {
-  const jd = new JSDOM(html);
-  return ParseNodes(jd.window.document.body.childNodes);
+export class HtmlParser {
+  constructor(private _stringParser: IDomParser) {}
+
+  parseHtml(html: string): BulletNode[] {
+    return ParseNodes(this._stringParser.getNodes(html));
+  }
 }
 
 function isHtmlElement(el: ChildNode): el is HTMLElement {
