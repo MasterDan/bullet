@@ -1,9 +1,12 @@
 import { BulletNode } from './bulletNode';
-import { parseHtml } from './templateParser';
+import { JsDomStringParser } from './stringParsers/JsDomStringParser';
+import { HtmlParser } from './templateParser';
+
+const parser = new HtmlParser(new JsDomStringParser());
 
 describe('html parse tests', () => {
   test('simple parsng', () => {
-    const nodes = parseHtml(
+    const nodes = parser.parseHtml(
       `<div>
         <span>Hello</span>
        </div>
@@ -33,7 +36,7 @@ describe('html parse tests', () => {
     ]);
   });
   test('Mixing Tags and text', () => {
-    const nodes = parseHtml(
+    const nodes = parser.parseHtml(
       `<div>
         <span>Hello</span>
        </div>

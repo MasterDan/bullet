@@ -1,5 +1,6 @@
 import { BulletNode } from './bulletNode';
 import { BulletRootNode } from './bulletRootNode';
+import { JsDomStringParser } from './stringParsers/JsDomStringParser';
 
 describe('BulletRootNode', () => {
   test('simple sequense', () => {
@@ -7,7 +8,7 @@ describe('BulletRootNode', () => {
         <div></div>
         <div></div>
         <div></div>`;
-    const node = BulletRootNode.fromHtml(html);
+    const node = BulletRootNode.create(new JsDomStringParser()).fromHtml(html);
     node.attributes = { class: 'cls' };
     const divNode = BulletNode.new((b) =>
       b.setElement('div').setAttributes((ab) => ab.add('class', 'cls'))
