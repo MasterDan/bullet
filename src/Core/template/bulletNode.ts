@@ -9,17 +9,17 @@ interface IBulletTextNode {
   text: string;
 }
 
-interface IBulletAttributes {
+export interface IBulletAttributes {
   attributes: Record<string, string>;
 }
 
-interface IBulletDirectives {
+export interface IBulletDirectives {
   directives: Record<string, string>;
 }
 interface IBulletNodeChildren {
   children: IBulletNode[];
 }
-interface IBulletNode
+export interface IBulletNode
   extends IBulletElement,
     IBulletAttributes,
     IBulletDirectives,
