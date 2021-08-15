@@ -4,7 +4,7 @@
   "description": "fast&furious javascript framework",
   "main": "index.js",
   "scripts": {
-    "serve": "webpack serve --open --mode=development",
+    "serve": "webpack serve --mode=development",
     "test": "jest",
     "restore": "npm i",
     "build:dev": "webpack --mode=development --watch",
