@@ -1,13 +1,11 @@
+import { ClassicDomParser } from '@/Core/template/stringParsers/ClassicDomParser';
+import { IDomParser } from '@/Core/template/stringParsers/types';
+import { IBulletContext } from './contextTypes';
+
 export interface IBulletContextArgs {
-  /**
-   * Просто чтобы линтер не ругался
-   */
-  state: string;
+  parser: IDomParser;
 }
 
-export class BulletContext {
-  state: string;
-  constructor(arg: IBulletContextArgs) {
-    this.state = arg.state;
-  }
+export class BulletContext implements IBulletContext {
+  parser: IDomParser = new ClassicDomParser();
 }
