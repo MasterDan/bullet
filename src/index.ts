@@ -1,6 +1,6 @@
-import { Bullet } from './Core/bullet/bullet';
+import { createBulletApp } from './Core/bullet/context/creators/createApp';
 import { componentForTests } from './Core/component/sandbox/componentForTests';
 console.log('Hello world!');
-Bullet.create((builder) => {
+createBulletApp((builder) => {
   builder.setRoot(componentForTests);
 }).mount('#app');
