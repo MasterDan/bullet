@@ -24,9 +24,7 @@ export interface IBulletNode
     IBulletAttributes,
     IBulletDirectives,
     IBulletNodeChildren,
-    IBulletTextNode {
-  draw(): string;
-}
+    IBulletTextNode {}
 
 export interface INodeBulder {
   build(): IBulletNode;
@@ -121,27 +119,5 @@ export class BulletNode implements IBulletNode {
   children: IBulletNode[];
   static new(ctor: (b: BulletElementBuilder) => INodeBulder): BulletNode {
     return ctor(new BulletElementBuilder()).build();
-  }
-  draw(): string {
-    if (this.text != null) {
-      return this.text;
-    }
-    if (this.element == null) {
-      throw new Error('Cannot Draw empty node');
-    }
-    const attributesArray = [];
-    for (const key in this.attributes) {
-      attributesArray.push(`${key}="${this.attributes[key]}"`);
-    }
-    const attributes = isEmpty(attributesArray)
-      ? ''
-      : ' ' + attributesArray.join(' ');
-    if (emptyTags.some((t) => t === this.element)) {
-      return `<${this.element}${attributes}/>`;
-    } else {
-      return `<${this.element}${attributes}>${this.children.map((c) =>
-        c.draw()
-      )}</${this.element}>`;
-    }
   }
 }
