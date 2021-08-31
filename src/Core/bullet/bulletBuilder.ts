@@ -2,6 +2,7 @@ import { BulletConstructor, Component } from '../component/component';
 import { Emitter } from '../reactive/emitter';
 import { Bullet } from './bullet';
 import { BulletContext } from './context/bulletContext';
+import { BulletDirective } from './context/directives/bulletDirective';
 import { ContextInjectorConstructor } from './context/injectors/bulletContextInjector';
 
 export class BulletBuilder<
@@ -15,6 +16,12 @@ export class BulletBuilder<
     ctor: (context: BulletContext) => BulletConstructor<TProps, TEmits>
   ): BulletBuilder<TProps, TEmits> {
     this.__root = new (ctor(this.__context))();
+    return this;
+  }
+  addDirective(
+    ...directives: BulletDirective[]
+  ): BulletBuilder<TProps, TEmits> {
+    this.__context.directives.push(...directives);
     return this;
   }
   use(

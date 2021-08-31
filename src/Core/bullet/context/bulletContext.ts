@@ -1,10 +1,11 @@
 import { IDomParser } from '@/Core/template/stringParsers/types';
-import { IBulletContext } from './contextTypes';
+import { BulletDirective } from './directives/bulletDirective';
 
 export interface IBulletContextArgs {
   parser: IDomParser;
 }
 
-export class BulletContext implements IBulletContext {
+export class BulletContext {
   parser: IDomParser;
+  directives: BulletDirective[] = [];
 }
