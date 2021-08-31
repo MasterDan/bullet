@@ -19,7 +19,7 @@ export class BulletBuilder<
     return this;
   }
   addDirective(
-    ...directives: BulletDirective[]
+    ...directives: BulletDirective<unknown>[]
   ): BulletBuilder<TProps, TEmits> {
     this.__context.directives.push(...directives);
     return this;
@@ -34,6 +34,7 @@ export class BulletBuilder<
   }
   build(): Bullet<TProps, TEmits> {
     const result = new Bullet<TProps, TEmits>();
+    result.__context = this.__context;
     result.__root = this.__root;
     return result;
   }

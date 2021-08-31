@@ -1,5 +1,4 @@
-import { isEmpty } from '../tools/array';
-import { emptyTags } from './tags';
+import { BulletDirectiveWithValue } from '../bullet/context/directives/bulletDirective';
 
 interface IBulletElement {
   element: string;
@@ -14,7 +13,7 @@ export interface IBulletAttributes {
 }
 
 export interface IBulletDirectives {
-  directives: Record<string, string>;
+  directives: BulletDirectiveWithValue<unknown>[];
 }
 interface IBulletNodeChildren {
   children: IBulletNode[];
@@ -104,18 +103,18 @@ class AttributeBuilder implements IBulletAttributes {
 }
 
 class DirectiveBuilder implements IBulletDirectives {
-  directives: Record<string, string> = {};
-  add(key: string, value: string): DirectiveBuilder {
-    this.directives[key] = value;
+  directives: BulletDirectiveWithValue<unknown>[] = [];
+  add(value: BulletDirectiveWithValue<unknown>): DirectiveBuilder {
+    this.directives.push(value);
     return this;
   }
 }
 
 export class BulletNode implements IBulletNode {
+  directives: BulletDirectiveWithValue<unknown>[];
   text: string;
   element: string;
   attributes: Record<string, string>;
-  directives: Record<string, string>;
   children: IBulletNode[];
   static new(ctor: (b: BulletElementBuilder) => INodeBulder): BulletNode {
     return ctor(new BulletElementBuilder()).build();

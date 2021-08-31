@@ -1,5 +1,9 @@
-export abstract class BulletDirective {
+export abstract class BulletDirective<T> {
   abstract expression: string;
-  abstract bind<T>(el: HTMLElement, value: T): void;
-  abstract destroy<T>(el: HTMLElement, value: T): void;
+  abstract bind(el: HTMLElement, value: T): void;
+  abstract destroy(el: HTMLElement, value: T): void;
+}
+
+export class BulletDirectiveWithValue<T> {
+  constructor(public directive: BulletDirective<T>, public value: T) {}
 }

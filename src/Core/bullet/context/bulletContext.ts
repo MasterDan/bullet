@@ -7,5 +7,5 @@ export interface IBulletContextArgs {
 
 export class BulletContext {
   parser: IDomParser;
-  directives: BulletDirective[] = [];
+  directives: BulletDirective<unknown>[] = [];
 }
