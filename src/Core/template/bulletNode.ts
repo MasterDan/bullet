@@ -80,6 +80,9 @@ class BulletNodeBuilder implements INodeBulder {
     worker(this.childrenBuilder);
     return this;
   }
+  then(func: (arg: BulletNodeBuilder) => BulletNodeBuilder): BulletNodeBuilder {
+    return func(this);
+  }
 }
 
 class ChildrenBuilder implements IBulletNodeChildren {
