@@ -36,7 +36,7 @@ function drawNode(node: BulletNode): string {
   }
 }
 
-function drawRootNode(root: BulletRootNode): string {
+export function drawRootNode(root: BulletRootNode): string {
   return root.core
     .map((n) => {
       Object.assign(n.attributes, root.attributes);

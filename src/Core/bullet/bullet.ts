@@ -1,5 +1,6 @@
 import { Component } from '../component/component';
 import { Emitter } from '../reactive/emitter';
+import { drawRootNode } from '../template/drawEngine/drawEngine';
 import { BulletContext } from './context/bulletContext';
 
 export class Bullet<
@@ -9,6 +10,8 @@ export class Bullet<
   __root: Component<TProps, TEmits>;
   __context: BulletContext;
   mount(selector: string): void {
-    document.querySelector(selector).innerHTML = this.__root.__template.draw();
+    document.querySelector(selector).innerHTML = drawRootNode(
+      this.__root.__template
+    );
   }
 }
