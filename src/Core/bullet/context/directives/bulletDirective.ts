@@ -1,5 +1,5 @@
 export abstract class BulletDirective<T> {
-  abstract expression: string;
+  abstract expression: RegExp;
   abstract bind(el: HTMLElement, value: T): void;
   abstract destroy(el: HTMLElement, value: T): void;
 }
