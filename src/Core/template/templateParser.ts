@@ -30,10 +30,19 @@ export class HtmlParser {
           BulletNode.new((builder) =>
             builder
               .setElement(node.nodeName.toLowerCase())
-              .setAttributes((ab) => {
-                for (const attr of node.attributes) {
-                  ab.add(attr.nodeName, attr.nodeValue);
-                }
+              .then((b) => {
+                const parsedAttrs = this.parseattributes(node.attributes);
+                return b
+                  .setAttributes((ab) => {
+                    for (const key of Object.keys(parsedAttrs.attributes)) {
+                      ab.add(key, parsedAttrs.attributes[key]);
+                    }
+                  })
+                  .setDirectives((db) => {
+                    for (const dir of parsedAttrs.directives) {
+                      db.add(dir);
+                    }
+                  });
               })
               .setChildren((cb) => {
                 this.ParseNodes(node.childNodes).forEach((bn) => {
