@@ -1,3 +1,4 @@
+import { BulletContext } from '../bullet/context/bulletContext';
 import { Emitter } from '../reactive/emitter';
 import { BulletRootNode } from '../template/bulletRootNode';
 import { ClassicDomParser } from '../template/stringParsers/ClassicDomParser';
@@ -22,18 +23,20 @@ export class Component<
     TEmits extends Record<string, Emitter<unknown>>
   >(
     setupArg: IComponentSetup<TProps, TEmits>
-  ): BulletConstructor<TProps, TEmits> {
-    return class extends Component<TProps, TEmits> {
-      __template = isNullOrWhiteSpace(setupArg.template)
-        ? null
-        : BulletRootNode.create(new ClassicDomParser()).fromHtml(
-            setupArg.template
-          );
-      __interface =
-        setupArg.definition instanceof ComponentInterface
-          ? setupArg.definition
-          : new ComponentInterfaceCustom(setupArg.definition);
-      setup = setupArg.setup;
+  ): (context: BulletContext) => BulletConstructor<TProps, TEmits> {
+    return (context) => {
+      return class extends Component<TProps, TEmits> {
+        __template = isNullOrWhiteSpace(setupArg.template)
+          ? null
+          : BulletRootNode.create(context.parser).fromHtml(setupArg.template)(
+              context
+            );
+        __interface =
+          setupArg.definition instanceof ComponentInterface
+            ? setupArg.definition
+            : new ComponentInterfaceCustom(setupArg.definition);
+        setup = setupArg.setup;
+      };
     };
   }
 }

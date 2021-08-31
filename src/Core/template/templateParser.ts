@@ -1,12 +1,13 @@
 import { BulletNode } from './bulletNode';
 import { isNullOrWhiteSpace } from '../tools/string';
 import { IDomParser } from './stringParsers/types';
+import { BulletContext } from '../bullet/context/bulletContext';
 
 export class HtmlParser {
-  constructor(private _stringParser: IDomParser) {}
+  constructor(private context: BulletContext) {}
 
   parseHtml(html: string): BulletNode[] {
-    return ParseNodes(this._stringParser.getNodes(html));
+    return ParseNodes(this.context.parser.getNodes(html));
   }
 }
 

@@ -12,9 +12,9 @@ export class BulletBuilder<
   __context: BulletContext = new BulletContext();
 
   setRoot(
-    component: BulletConstructor<TProps, TEmits>
+    ctor: (context: BulletContext) => BulletConstructor<TProps, TEmits>
   ): BulletBuilder<TProps, TEmits> {
-    this.__root = new component();
+    this.__root = new (ctor(this.__context))();
     return this;
   }
   use(
