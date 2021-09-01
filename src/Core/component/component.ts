@@ -3,6 +3,7 @@ import { makeObjectReactive, ReactiveObjectProxy } from '../proxy/objectProxy';
 import { Emitter } from '../reactive/emitter';
 import { BulletRootNode } from '../template/bulletRootNode';
 import { isNullOrWhiteSpace } from '../tools/string';
+import { ComponentHooks } from './componentHooks';
 import {
   ComponentInterface,
   ComponentInterfaceCustom,
@@ -15,6 +16,10 @@ export class Component<
   __interface: ComponentInterface<TProps, TEmits> = null;
   __template: BulletRootNode = null;
   __data: ReactiveObjectProxy<Record<string, unknown>>;
+  __hooks = new ComponentHooks();
+  __setup: (
+    def: IComponentInterface<TProps, TEmits>
+  ) => Record<string, unknown>;
   static create<
     TProps extends Record<string, unknown>,
     TEmits extends Record<string, Emitter<unknown>>
@@ -32,6 +37,7 @@ export class Component<
           config.definition instanceof ComponentInterface
             ? config.definition
             : new ComponentInterfaceCustom(config.definition);
+        __setup = config.setup;
         __data = makeObjectReactive(config.setup(this.__interface));
       };
     };
