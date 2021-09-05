@@ -1,6 +1,7 @@
 import { Emitter } from '@/Core/reactive/emitter';
 import { Bullet } from '../../bullet';
 import { BulletBuilder } from '../../bulletBuilder';
+import { defaultDirectives } from '../directives/default/defaultDirectives';
 import { ClassicDomParserInjector } from '../injectors/classicDomParserInjector';
 
 export function createBulletApp<
@@ -11,6 +12,9 @@ export function createBulletApp<
 ): Bullet<TProps, TEmits> {
   const builder = new BulletBuilder<TProps, TEmits>();
   builder.use(ClassicDomParserInjector);
+  defaultDirectives.forEach((d) => {
+    builder.addDirective(new d());
+  });
   ctor(builder);
   return builder.build();
 }

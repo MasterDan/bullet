@@ -4,6 +4,8 @@ export abstract class BulletDirective {
   abstract destroy(el: HTMLElement, value: string, groups: string[]): void;
 }
 
+export type DirectiveConstructor = new (...args) => BulletDirective;
+
 export class BulletDirectiveWithValue {
   constructor(
     public directive: BulletDirective,

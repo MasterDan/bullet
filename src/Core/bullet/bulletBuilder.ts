@@ -19,7 +19,7 @@ export class BulletBuilder<
     return this;
   }
   addDirective(
-    ...directives: BulletDirective<unknown>[]
+    ...directives: BulletDirective[]
   ): BulletBuilder<TProps, TEmits> {
     this.__context.directives.push(...directives);
     return this;
