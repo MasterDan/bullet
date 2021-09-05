@@ -1,7 +1,6 @@
 import { BulletContext } from '../bullet/context/bulletContext';
 import { BulletDirectiveWithValue } from '../bullet/context/directives/bulletDirective';
 import { BulletNode, IBulletAttributes, IBulletDirectives } from './bulletNode';
-import { IDomParser } from './stringParsers/types';
 import { HtmlParser } from './templateParser';
 
 export class BulletRootNode implements IBulletAttributes, IBulletDirectives {

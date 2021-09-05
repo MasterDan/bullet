@@ -5,7 +5,7 @@ import { BulletDirectiveWithValue } from '../bullet/context/directives/bulletDir
 
 interface IParseAttributesResult {
   attributes: Record<string, string>;
-  directives: BulletDirectiveWithValue<unknown>[];
+  directives: BulletDirectiveWithValue[];
 }
 export class HtmlParser {
   constructor(private context: BulletContext) {}
@@ -57,7 +57,7 @@ export class HtmlParser {
   }
   /** Отделяем атрибуты от наших директив */
   parseattributes(attributes: NamedNodeMap): IParseAttributesResult {
-    const directivesResult: BulletDirectiveWithValue<unknown>[] = [];
+    const directivesResult: BulletDirectiveWithValue[] = [];
     const attributesResult: Record<string, string> = {};
 
     for (const attr of attributes) {
@@ -66,7 +66,11 @@ export class HtmlParser {
       for (const directive of this.context.directives) {
         if (directive.expression.test(attr.nodeName)) {
           directivesResult.push(
-            new BulletDirectiveWithValue(directive, attr.nodeValue)
+            new BulletDirectiveWithValue(
+              directive,
+              attr.nodeValue,
+              attr.nodeName.match(directive.expression)
+            )
           );
           isNotDirective = false;
           break;
