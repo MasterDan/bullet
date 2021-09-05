@@ -13,7 +13,7 @@ export function generateRenderFunction<
   throw new Error('Not implemented');
 }
 
-function drawNode(node: BulletNode): string {
+export function drawNode(node: BulletNode): string {
   if (node.text != null) {
     return node.text;
   }

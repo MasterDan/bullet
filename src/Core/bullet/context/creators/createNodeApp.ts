@@ -3,7 +3,7 @@ import { Bullet } from '../../bullet';
 import { BulletBuilder } from '../../bulletBuilder';
 import { JsDomParserInjector } from '../injectors/jsDomParserInjector';
 
-export function createApp<
+export function createNodeApp<
   TProps extends Record<string, unknown>,
   TEmits extends Record<string, Emitter<unknown>>
 >(

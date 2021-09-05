@@ -1,6 +1,7 @@
+import { createNodeApp } from '../bullet/context/creators/createNodeApp';
 import { BulletNode } from './bulletNode';
 import { BulletRootNode } from './bulletRootNode';
-import { JsDomStringParser } from './stringParsers/JsDomStringParser';
+import { drawNode, drawRootNode } from './drawEngine/drawEngine';
 
 describe('BulletRootNode', () => {
   test('simple sequense', () => {
@@ -8,13 +9,15 @@ describe('BulletRootNode', () => {
         <div></div>
         <div></div>
         <div></div>`;
-    const node = BulletRootNode.create(new JsDomStringParser()).fromHtml(html);
+    const node = BulletRootNode.create().fromHtml(html)(
+      createNodeApp(() => undefined).__context
+    );
     node.attributes = { class: 'cls' };
     const divNode = BulletNode.new((b) =>
       b.setElement('div').setAttributes((ab) => ab.add('class', 'cls'))
     );
-    expect(node.draw()).toEqual(
-      [divNode, divNode, divNode].map((e) => e.draw()).join('')
+    expect(drawRootNode(node)).toEqual(
+      [divNode, divNode, divNode].map((e) => drawNode(e)).join('')
     );
   });
 });

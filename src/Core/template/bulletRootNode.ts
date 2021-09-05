@@ -8,14 +8,12 @@ export class BulletRootNode implements IBulletAttributes, IBulletDirectives {
   directives: BulletDirectiveWithValue<unknown>[] = [];
   attributes: Record<string, string> = {};
   core: BulletNode[] = [];
-  static create(parser: IDomParser): BulletRootNodeFabric {
-    return new BulletRootNodeFabric(parser);
+  static create(): BulletRootNodeFabric {
+    return new BulletRootNodeFabric();
   }
 }
 
 class BulletRootNodeFabric {
-  constructor(private _parser: IDomParser) {}
-
   fromHtml(html: string): (context: BulletContext) => BulletRootNode {
     return (context) => {
       const rnode = new BulletRootNode();

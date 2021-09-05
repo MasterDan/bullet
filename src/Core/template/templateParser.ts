@@ -55,6 +55,7 @@ export class HtmlParser {
     }
     return result;
   }
+  /** Отделяем атрибуты от наших директив */
   parseattributes(attributes: NamedNodeMap): IParseAttributesResult {
     const directivesResult: BulletDirectiveWithValue<unknown>[] = [];
     const attributesResult: Record<string, string> = {};

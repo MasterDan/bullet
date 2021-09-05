@@ -1,8 +1,8 @@
 import { BulletNode } from './bulletNode';
-import { JsDomStringParser } from './stringParsers/JsDomStringParser';
 import { HtmlParser } from './templateParser';
+import { createNodeApp } from '../bullet/context/creators/createNodeApp';
 
-const parser = new HtmlParser(new JsDomStringParser());
+const parser = new HtmlParser(createNodeApp(() => undefined).__context);
 
 describe('html parse tests', () => {
   test('simple parsng', () => {
