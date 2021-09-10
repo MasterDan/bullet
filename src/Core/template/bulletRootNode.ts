@@ -4,7 +4,7 @@ import { BulletNode, IBulletAttributes, IBulletDirectives } from './bulletNode';
 import { HtmlParser } from './templateParser';
 
 export class BulletRootNode implements IBulletAttributes, IBulletDirectives {
-  directives: BulletDirectiveWithValue<unknown>[] = [];
+  directives: BulletDirectiveWithValue[] = [];
   attributes: Record<string, string> = {};
   core: BulletNode[] = [];
   static create(): BulletRootNodeFabric {

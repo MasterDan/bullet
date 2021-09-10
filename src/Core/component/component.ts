@@ -30,9 +30,7 @@ export class Component<
       return class extends Component<TProps, TEmits> {
         __template = isNullOrWhiteSpace(config.template)
           ? null
-          : BulletRootNode.create(context.parser).fromHtml(config.template)(
-              context
-            );
+          : BulletRootNode.create().fromHtml(config.template)(context);
         __interface =
           config.definition instanceof ComponentInterface
             ? config.definition
