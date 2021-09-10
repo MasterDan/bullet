@@ -10,6 +10,15 @@ export class Pipeline<Tinput, Toutput> {
   constructor(...line: LineOfPipe<Tinput, Toutput>) {
     this.line = [...line];
   }
+  mergeWith<T>(
+    attachment: Pipe<Toutput, T> | Pipeline<Toutput, T>
+  ): Pipeline<Tinput, T> {
+    if (attachment instanceof Pipe) {
+      return new Pipeline<Tinput, T>(...this.line, attachment);
+    } else {
+      return new Pipeline<Tinput, T>(...this.line, ...attachment.line);
+    }
+  }
 }
 
 export class Pipe<Tinput, Toutput> {
