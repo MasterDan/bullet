@@ -1,5 +1,6 @@
 import { BulletConstructor, Component } from '../component/component';
 import { Emitter } from '../reactive/emitter';
+import { compileComponent } from '../template/drawEngine/drawEngine';
 import { Bullet } from './bullet';
 import { BulletContext } from './context/bulletContext';
 import { BulletDirective } from './context/directives/bulletDirective';
@@ -9,8 +10,8 @@ export class BulletBuilder<
   TProps extends Record<string, unknown>,
   TEmits extends Record<string, Emitter<unknown>>
 > {
-  __root: Component<TProps, TEmits>;
-  __context: BulletContext = new BulletContext();
+  __root: Component<TProps, TEmits> | undefined;
+  __context = new BulletContext();
 
   setRoot(
     ctor: (context: BulletContext) => BulletConstructor<TProps, TEmits>
@@ -29,13 +30,15 @@ export class BulletBuilder<
   ): BulletBuilder<TProps, TEmits> {
     for (const injector of injectors) {
       this.__context = new injector().inject(this.__context);
-      return this;
     }
+    return this;
   }
   build(): Bullet<TProps, TEmits> {
     const result = new Bullet<TProps, TEmits>();
     result.__context = this.__context;
-    result.__root = this.__root;
+    if (this.__root) {
+      result.__root = compileComponent(this.__root, this.__context);
+    }
     return result;
   }
 }
