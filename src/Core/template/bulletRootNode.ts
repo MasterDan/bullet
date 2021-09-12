@@ -5,7 +5,7 @@ import { HtmlParser } from './templateParser';
 
 export class BulletRootNode implements IBulletAttributes, IBulletDirectives {
   directives: BulletDirectiveWithValue[] = [];
-  attributes: Record<string, string> = {};
+  attributes: Record<string, string | null> = {};
   core: BulletNode[] = [];
   static create(): BulletRootNodeFabric {
     return new BulletRootNodeFabric();
