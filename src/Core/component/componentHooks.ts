@@ -1,10 +1,10 @@
 import { Emitter } from '../reactive/emitter';
 
 export class ComponentHooks {
-  created: Emitter<void>;
-  mount: Emitter<void>;
-  mounted: Emitter<void>;
-  update: Emitter<void>;
-  updated: Emitter<void>;
-  dispose: Emitter<void>;
+  created = new Emitter<void>();
+  mount = new Emitter<void>();
+  mounted = new Emitter<void>();
+  update = new Emitter<void>();
+  updated = new Emitter<void>();
+  dispose = new Emitter<void>();
 }

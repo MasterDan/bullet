@@ -9,11 +9,11 @@ interface IBulletTextNode {
 }
 
 export interface IBulletAttributes {
-  attributes: Record<string, string>;
+  attributes: Record<string, string | null>;
 }
 
 export interface IBulletDirectives {
-  directives: BulletDirectiveWithValue<unknown>[];
+  directives: BulletDirectiveWithValue[];
 }
 interface IBulletNodeChildren {
   children: IBulletNode[];
@@ -30,8 +30,8 @@ export interface INodeBulder {
 }
 
 class BulletElementBuilder implements IBulletElement, IBulletTextNode {
-  text: string;
-  element: string;
+  text!: string;
+  element!: string;
   setElement(name: string): BulletNodeBuilder {
     this.element = name;
     return new BulletNodeBuilder(this);
@@ -98,27 +98,27 @@ class ChildrenBuilder implements IBulletNodeChildren {
 }
 
 class AttributeBuilder implements IBulletAttributes {
-  attributes: Record<string, string> = {};
-  add(key: string, value: string): AttributeBuilder {
+  attributes: Record<string, string | null> = {};
+  add(key: string, value: string | null): AttributeBuilder {
     this.attributes[key] = value;
     return this;
   }
 }
 
 class DirectiveBuilder implements IBulletDirectives {
-  directives: BulletDirectiveWithValue<unknown>[] = [];
-  add(value: BulletDirectiveWithValue<unknown>): DirectiveBuilder {
+  directives: BulletDirectiveWithValue[] = [];
+  add(value: BulletDirectiveWithValue): DirectiveBuilder {
     this.directives.push(value);
     return this;
   }
 }
 
 export class BulletNode implements IBulletNode {
-  directives: BulletDirectiveWithValue<unknown>[];
-  text: string;
-  element: string;
-  attributes: Record<string, string>;
-  children: IBulletNode[];
+  directives!: BulletDirectiveWithValue[];
+  text!: string;
+  element!: string;
+  attributes!: Record<string, string | null>;
+  children!: IBulletNode[];
   static new(ctor: (b: BulletElementBuilder) => INodeBulder): BulletNode {
     return ctor(new BulletElementBuilder()).build();
   }

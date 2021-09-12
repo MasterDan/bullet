@@ -6,6 +6,6 @@ export interface IBulletContextArgs {
 }
 
 export class BulletContext {
-  parser: IDomParser;
-  directives: BulletDirective<unknown>[] = [];
+  parser: IDomParser | undefined;
+  directives: BulletDirective[] = [];
 }

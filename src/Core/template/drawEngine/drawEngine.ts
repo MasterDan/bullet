@@ -1,5 +1,6 @@
 import { BulletContext } from '@/Core/bullet/context/bulletContext';
 import { Component } from '@/Core/component/component';
+import { ComponentHookBinder } from '@/Core/component/ComponentHookBinder';
 import { Emitter } from '@/Core/reactive/emitter';
 import { isEmpty } from '@/core/tools/array';
 import { BulletNode } from '../bulletNode';
@@ -9,7 +10,11 @@ import { emptyTags } from '../tags';
 export function generateRenderFunction<
   TProps extends Record<string, unknown>,
   TEmits extends Record<string, Emitter<unknown>>
->(component: Component<TProps, TEmits>, context: BulletContext): void {
+>(
+  component: Component<TProps, TEmits>,
+  context: BulletContext
+): (cpt: Component<TProps, TEmits>) => void {
+  new ComponentHookBinder();
   throw new Error('Not implemented');
 }
 

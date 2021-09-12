@@ -4,24 +4,31 @@ import { BulletContext } from '../bullet/context/bulletContext';
 import { BulletDirectiveWithValue } from '../bullet/context/directives/bulletDirective';
 
 interface IParseAttributesResult {
-  attributes: Record<string, string>;
+  attributes: Record<string, string | null>;
   directives: BulletDirectiveWithValue[];
 }
 export class HtmlParser {
   constructor(private context: BulletContext) {}
 
   parseHtml(html: string): BulletNode[] {
+    if (this.context.parser == undefined) {
+      throw new Error('Parser must be set before parse starts');
+    }
     return this.ParseNodes(this.context.parser.getNodes(html));
   }
   ParseNodes(nodes: NodeListOf<ChildNode>): BulletNode[] {
     const result: BulletNode[] = [];
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
+      if (node == null) {
+        continue;
+      }
       if (node.nodeName === '#text') {
-        if (!isNullOrWhiteSpace(node.nodeValue)) {
+        const value = node.nodeValue;
+        if (!isNullOrWhiteSpace(value)) {
           result.push(
             BulletNode.new((b) => {
-              return b.setText(node.nodeValue.trim());
+              return b.setText(value.trim());
             })
           );
         }
@@ -58,7 +65,7 @@ export class HtmlParser {
   /** Отделяем атрибуты от наших директив */
   parseattributes(attributes: NamedNodeMap): IParseAttributesResult {
     const directivesResult: BulletDirectiveWithValue[] = [];
-    const attributesResult: Record<string, string> = {};
+    const attributesResult: Record<string, string | null> = {};
 
     for (const attr of attributes) {
       let isNotDirective = true;
@@ -69,7 +76,7 @@ export class HtmlParser {
             new BulletDirectiveWithValue(
               directive,
               attr.nodeValue,
-              attr.nodeName.match(directive.expression)
+              attr.nodeName.match(directive.expression) || []
             )
           );
           isNotDirective = false;

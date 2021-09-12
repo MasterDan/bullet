@@ -4,12 +4,12 @@ export abstract class BulletDirective {
   abstract destroy(el: HTMLElement, value: string, groups: string[]): void;
 }
 
-export type DirectiveConstructor = new (...args) => BulletDirective;
+export type DirectiveConstructor = new (...args: unknown[]) => BulletDirective;
 
 export class BulletDirectiveWithValue {
   constructor(
     public directive: BulletDirective,
-    public value: string,
+    public value: string | null,
     public groups: string[]
   ) {}
 }

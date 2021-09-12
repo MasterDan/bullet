@@ -13,23 +13,23 @@ export class Component<
   TProps extends Record<string, unknown>,
   TEmits extends Record<string, Emitter<unknown>>
 > {
-  __interface: ComponentInterface<TProps, TEmits> = null;
-  __template: BulletRootNode = null;
-  __data: ReactiveObjectProxy<Record<string, unknown>>;
+  __interface: ComponentInterface<TProps, TEmits> | undefined;
+  __template: BulletRootNode | undefined;
+  __data: ReactiveObjectProxy<Record<string, unknown>> | undefined;
   __hooks = new ComponentHooks();
-  __setup: (
-    def: IComponentInterface<TProps, TEmits>
-  ) => Record<string, unknown>;
+  __setup:
+    | ((def: IComponentInterface<TProps, TEmits>) => Record<string, unknown>)
+    | undefined;
   static create<
     TProps extends Record<string, unknown>,
     TEmits extends Record<string, Emitter<unknown>>
   >(
     config: IComponentSetup<TProps, TEmits>
   ): (context: BulletContext) => BulletConstructor<TProps, TEmits> {
-    return (context) => {
+    return (context): BulletConstructor<TProps, TEmits> => {
       return class extends Component<TProps, TEmits> {
         __template = isNullOrWhiteSpace(config.template)
-          ? null
+          ? undefined
           : BulletRootNode.create().fromHtml(config.template)(context);
         __interface =
           config.definition instanceof ComponentInterface
@@ -37,7 +37,7 @@ export class Component<
             : new ComponentInterfaceCustom(config.definition);
         __setup = config.setup;
         __data = makeObjectReactive(config.setup(this.__interface));
-      };
+      } as BulletConstructor<TProps, TEmits>;
     };
   }
 }
@@ -54,4 +54,4 @@ export interface IComponentSetup<
 export type BulletConstructor<
   TProps extends Record<string, unknown>,
   TEmits extends Record<string, Emitter<unknown>>
-> = new (...args) => Component<TProps, TEmits>;
+> = new (...args: unknown[]) => Component<TProps, TEmits>;
