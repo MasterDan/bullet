@@ -4,9 +4,11 @@ import { ComponentCompiled } from '@/Core/component/componentCompiled';
 import { ComponentHookBinder } from '@/Core/component/ComponentHookBinder';
 import { Emitter } from '@/Core/reactive/emitter';
 import { isEmpty } from '@/core/tools/array';
+import { isNullOrEmty } from '@/Core/tools/string';
 import { BulletNode } from '../bulletNode';
 import { BulletRootNode } from '../bulletRootNode';
 import { emptyTags } from '../tags';
+import { HtmlParser } from '../templateParser';
 
 export function compileComponent<
   TProps extends Record<string, unknown>,
@@ -15,6 +17,11 @@ export function compileComponent<
   component: Component<TProps, TEmits>,
   context: BulletContext
 ): ComponentCompiled<TProps, TEmits> {
+  const parser = new HtmlParser(context);
+  if (isNullOrEmty(component.__template)) {
+    throw new Error('Template must exist in component!');
+  }
+  const nodes = parser.parseHtml(component.__template);
   new ComponentHookBinder();
   throw new Error('Not implemented');
 }
