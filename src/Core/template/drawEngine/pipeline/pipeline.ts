@@ -25,8 +25,17 @@ export class Pipeline<Tinput, Toutput> {
       );
     }
   }
+  run(arg?: Tinput): Toutput {
+    let result: unknown;
+    result = this.line[0].body(arg);
+    for (let i = 1; i < this.line.length; i++) {
+      const pipe = this.line[i] as Pipe<unknown, unknown>;
+      result = pipe.body(result);
+    }
+    return result as Toutput;
+  }
 }
 
 export class Pipe<Tinput, Toutput> {
-  constructor(public body: (input: Tinput) => Toutput) {}
+  constructor(public body: (input?: Tinput) => Toutput) {}
 }
