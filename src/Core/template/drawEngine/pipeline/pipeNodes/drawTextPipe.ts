@@ -1,11 +1,11 @@
-import { IDrawArg } from '../drawArg';
+import { IDrawNodeArg } from '../drawArg';
 import { Pipe } from '../pipeline';
 
-export class DrawTextPipe extends Pipe<IDrawArg, IDrawArg> {
+export class DrawTextPipe extends Pipe<IDrawNodeArg, IDrawNodeArg> {
   constructor() {
     super(
-      (arg?: IDrawArg): IDrawArg => {
-        return arg as IDrawArg;
+      (arg?: IDrawNodeArg): IDrawNodeArg => {
+        return arg as IDrawNodeArg;
       }
     );
   }

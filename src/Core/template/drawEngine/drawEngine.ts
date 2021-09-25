@@ -1,7 +1,7 @@
 import { BulletContext } from '@/Core/bullet/context/bulletContext';
 import { Component } from '@/Core/component/component';
 import { ComponentCompiled } from '@/Core/component/componentCompiled';
-import { ComponentHookBinder } from '@/Core/component/ComponentHookBinder';
+import { ComponentPipelineBuilder } from '@/Core/component/ComponentHookBinder';
 import { Emitter } from '@/Core/reactive/emitter';
 import { isEmpty } from '@/core/tools/array';
 import { isNullOrEmty } from '@/Core/tools/string';
@@ -9,6 +9,7 @@ import { BulletNode } from '../bulletNode';
 import { BulletRootNode } from '../bulletRootNode';
 import { emptyTags } from '../tags';
 import { HtmlParser } from '../templateParser';
+import { generateLifecycle } from './lifecycleGenerator';
 
 export function compileComponent<
   TProps extends Record<string, unknown>,
@@ -22,7 +23,18 @@ export function compileComponent<
     throw new Error('Template must exist in component!');
   }
   const nodes = parser.parseHtml(component.__template);
-  new ComponentHookBinder();
+  const lifecycle = generateLifecycle({
+    builder: new ComponentPipelineBuilder(),
+    context,
+    nodes
+  });
+  // todo: Реализовать отрисовку
+  const result = new ComponentCompiled<TProps, TEmits>();
+  result.__interface = component.__interface;
+  result.__data = component.__data;
+  result.__hooks = component.__hooks;
+  result.__setup = component.__setup;
+  result.__lifecycle = lifecycle.build();
   throw new Error('Not implemented');
 }
 
