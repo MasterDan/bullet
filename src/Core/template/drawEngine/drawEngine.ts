@@ -3,9 +3,11 @@ import { BulletNode } from '../bulletNode';
 import { BulletRootNode } from '../bulletRootNode';
 import { emptyTags } from '../tags';
 
-export function drawNode(node: BulletNode): string {
+export type BulletNodeRenderer = (content: string) => string;
+
+export function drawNode(node: BulletNode): BulletNodeRenderer {
   if (node.text != null) {
-    return node.text;
+    return () => node.text;
   }
   if (node.element == null) {
     throw new Error('Cannot Draw empty node');
@@ -18,11 +20,10 @@ export function drawNode(node: BulletNode): string {
     ? ''
     : ' ' + attributesArray.join(' ');
   if (emptyTags.some((t) => t === node.element)) {
-    return `<${node.element}${attributes}/>`;
+    return () => `<${node.element}${attributes}/>`;
   } else {
-    return `<${node.element}${attributes}>${node.children.map((c) =>
-      drawNode(c)
-    )}</${node.element}>`;
+    return (content) =>
+      `<${node.element}${attributes}>${content}</${node.element}>`;
   }
 }
 
