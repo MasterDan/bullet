@@ -1,6 +1,6 @@
 import { BulletConstructor, Component } from '../component/component';
 import { Emitter } from '../reactive/emitter';
-import { compileComponent } from '../template/drawEngine/drawEngine';
+import { compileComponent } from '../template/drawEngine/compileComponent';
 import { Bullet } from './bullet';
 import { BulletContext } from './context/bulletContext';
 import { BulletDirective } from './context/directives/bulletDirective';
