@@ -28,7 +28,6 @@ export function compileComponent<
     context,
     nodes
   });
-  // todo: Реализовать отрисовку
   const result = new ComponentCompiled<TProps, TEmits>();
   result.__interface = component.__interface;
   result.__data = component.__data;
