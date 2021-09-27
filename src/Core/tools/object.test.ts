@@ -1,4 +1,4 @@
-import { sameKeys } from './object';
+import { isNullOrEmpty, sameKeys } from './object';
 
 describe('object tools', () => {
   test('sameKeys', () => {
@@ -9,5 +9,11 @@ describe('object tools', () => {
     expect(
       sameKeys({ first: 'a', second: 'b' }, { second: 'b', first: 'a' })
     ).toBe(true);
+  });
+  test('isNullOrEmpty', () => {
+    expect(isNullOrEmpty({})).toBe(true);
+    expect(isNullOrEmpty(null)).toBe(true);
+    expect(isNullOrEmpty(undefined)).toBe(true);
+    expect(isNullOrEmpty({ foo: 'bar' })).toBe(false);
   });
 });

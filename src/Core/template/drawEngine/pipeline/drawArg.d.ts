@@ -6,6 +6,7 @@ export interface IDrawNodeArg {
   node: BulletNode;
   context: BulletContext;
   builder: ComponentPipelineBuilder;
+  parentNode?: BulletNode;
 }
 
 export interface IDrawArg {

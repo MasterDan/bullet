@@ -6,12 +6,6 @@ import { emptyTags } from '../tags';
 export type BulletNodeRenderer = (content: string) => string;
 
 export function drawNode(node: BulletNode): BulletNodeRenderer {
-  if (node.text != null) {
-    return () => node.text;
-  }
-  if (node.element == null) {
-    throw new Error('Cannot Draw empty node');
-  }
   const attributesArray = [];
   for (const key in node.attributes) {
     attributesArray.push(`${key}="${node.attributes[key]}"`);
