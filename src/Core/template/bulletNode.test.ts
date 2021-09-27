@@ -23,6 +23,8 @@ describe('Bullet Node', () => {
         .setAttributes((b) => b.add('class', 'cls'))
         .setChildren((b) => b.add((b) => b.setElement('span')))
     );
-    expect(drawNode(node)).toBe('<div class="cls"><span></span></div>');
+    expect(
+      drawNode(node)(node.children.map((c) => drawNode(c)('')).join(''))
+    ).toBe('<div class="cls"><span></span></div>');
   });
 });

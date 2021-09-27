@@ -26,7 +26,7 @@ export function drawRootNode(root: BulletRootNode): string {
     .map((n) => {
       Object.assign(n.attributes, root.attributes);
       Object.assign(n.directives, root.directives);
-      return drawNode(n);
+      return drawNode(n)('');
     })
     .join('');
 }
