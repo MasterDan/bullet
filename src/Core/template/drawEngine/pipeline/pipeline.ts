@@ -7,7 +7,8 @@ export type LineOfPipe<Tinput, Toutput> =
   | [Pipe<Tinput, Toutput>];
 export class Pipeline<Tinput, Toutput> {
   line: LineOfPipe<Tinput, Toutput>;
-  constructor(...line: Pipe<unknown, unknown>[]) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(...line: Pipe<any, any>[]) {
     this.line = [...line] as LineOfPipe<Tinput, Toutput>;
   }
   mergeWith<T>(
