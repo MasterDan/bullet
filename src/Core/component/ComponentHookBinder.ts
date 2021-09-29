@@ -4,11 +4,11 @@ import { Pipeline } from '../template/drawEngine/pipeline/pipeline';
 import { ComponentCompiled } from './componentCompiled';
 
 export class ComponentHookBinder {
-  onMount: Subscribtion<void> | undefined;
+  onMount: Subscribtion<HTMLElement> | undefined;
   onUpdate: Subscribtion<void> | undefined;
   onDispose: Subscribtion<void> | undefined;
   constructor(arg?: {
-    onMount?: Subscribtion<void>;
+    onMount?: Subscribtion<HTMLElement>;
     onUpdate?: Subscribtion<void>;
     onDispose?: Subscribtion<void>;
   }) {
@@ -27,14 +27,14 @@ export class ComponentHookBinder {
 }
 
 export class ComponentPipelineBuilder {
-  onMount = new Pipeline<unknown, unknown>();
+  onMount = new Pipeline<HTMLElement, unknown>();
   onUpdate = new Pipeline<unknown, unknown>();
   onDispose = new Pipeline<unknown, unknown>();
 
   build(): ComponentHookBinder {
     return new ComponentHookBinder({
-      onMount: () => {
-        this.onMount.run();
+      onMount: (element) => {
+        this.onMount.run(element);
       },
       onUpdate: () => {
         this.onUpdate.run();
