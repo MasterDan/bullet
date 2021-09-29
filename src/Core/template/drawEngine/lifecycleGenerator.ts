@@ -10,7 +10,7 @@ export function generateLifecycleForNode(
     throw new Error('We received empty node. Something wrong with parsing');
   }
   if (isAny(arg.node.children)) {
-    generateLifecycle({
+    const builder = generateLifecycle({
       builder: arg.builder,
       context: arg.context,
       nodes: arg.node.children,
@@ -29,5 +29,6 @@ export function generateLifecycle(arg: IDrawArg): ComponentPipelineBuilder {
       node
     });
   }
+
   return builder;
 }

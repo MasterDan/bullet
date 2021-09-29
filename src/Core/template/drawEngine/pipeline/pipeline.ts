@@ -28,15 +28,20 @@ export class Pipeline<Tinput, Toutput> {
   }
   run(arg?: Tinput): Toutput {
     let result: unknown;
-    result = this.line[0].body(arg);
+    result = this.line[0].run(arg);
     for (let i = 1; i < this.line.length; i++) {
       const pipe = this.line[i] as Pipe<unknown, unknown>;
-      result = pipe.body(result);
+      result = pipe.run(result);
     }
     return result as Toutput;
   }
 }
-
+export type PipeArg<Tinput, Toutput> =
+  | ((input?: Tinput) => Toutput)
+  | ((input: Tinput) => Toutput);
 export class Pipe<Tinput, Toutput> {
-  constructor(public body: (input?: Tinput) => Toutput) {}
+  constructor(public body: PipeArg<Tinput, Toutput>) {}
+  run(arg?: Tinput): Toutput {
+    return this.body(arg as Tinput);
+  }
 }
