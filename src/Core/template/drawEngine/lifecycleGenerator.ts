@@ -10,16 +10,12 @@ export function generateLifecycleForNode(
     throw new Error('We received empty node. Something wrong with parsing');
   }
   if (isAny(arg.node.children)) {
-    let builder = arg.builder;
-    for (const child of arg.node.children) {
-      builder = generateLifecycleForNode({
-        builder,
-        node: child,
-        context: arg.context,
-        parentNode: arg.node
-      });
-    }
-    arg.builder = builder;
+    generateLifecycle({
+      builder: arg.builder,
+      context: arg.context,
+      nodes: arg.node.children,
+      parentNode: arg.node
+    });
   }
   return arg.builder;
 }
