@@ -26,6 +26,21 @@ export class Pipeline<Tinput, Toutput> {
       );
     }
   }
+  mergrHead<T>(
+    attachment: Pipe<T, Tinput> | Pipeline<T, Tinput>
+  ): Pipeline<T, Tinput> {
+    if (attachment instanceof Pipe) {
+      return new Pipeline<T, Tinput>(
+        attachment as Pipe<unknown, unknown>,
+        ...(this.line as Pipe<unknown, unknown>[])
+      );
+    } else {
+      return new Pipeline<T, Tinput>(
+        ...(attachment.line as Pipe<unknown, unknown>[]),
+        ...(this.line as Pipe<unknown, unknown>[])
+      );
+    }
+  }
   run(arg?: Tinput): Toutput {
     let result: unknown;
     result = this.line[0].run(arg);

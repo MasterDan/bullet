@@ -1,18 +1,17 @@
 import { drawNode } from '../../drawEngine';
-import { IDrawNodeArg } from '../drawArg';
+import { IDrawNodePipeArg } from '../drawArg';
 import { Pipe } from '../pipeline';
 
-export class GenerateRenderPipe extends Pipe<IDrawNodeArg, IDrawNodeArg> {
+export class GenerateRenderPipe extends Pipe<
+  IDrawNodePipeArg,
+  IDrawNodePipeArg
+> {
   constructor() {
     super(
-      (arg: IDrawNodeArg): IDrawNodeArg => {
+      (arg: IDrawNodePipeArg): IDrawNodePipeArg => {
         const render = drawNode(arg.node);
-        if (arg.resultAccumulator == undefined) {
-          arg.resultAccumulator = [render];
-        } else {
-          arg.resultAccumulator.push(render);
-        }
-        return arg as IDrawNodeArg;
+
+        return arg as IDrawNodePipeArg;
       }
     );
   }
