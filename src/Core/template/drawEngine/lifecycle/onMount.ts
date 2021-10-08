@@ -1,3 +1,4 @@
+import { Pipe } from '../pipeline/pipeline';
 import { IDrawArg, IDrawNodeArg, IDrawNodesArg } from './drawArg';
 
 export function appendMoutHook(arg: IDrawArg): IDrawArg {
