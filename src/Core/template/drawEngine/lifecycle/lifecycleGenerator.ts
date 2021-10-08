@@ -1,5 +1,5 @@
 import { ComponentPipelineBuilder } from '@/Core/component/ComponentHookBinder';
-import { IDrawArg } from '../pipeline/drawArg';
+import { IDrawArg } from './drawArg';
 
 /**
  * Генерируем сущность, которая позднее подпишется
