@@ -5,7 +5,7 @@ import { ComponentPipelineBuilder } from '@/Core/component/ComponentHookBinder';
 import { Emitter } from '@/Core/reactive/emitter';
 import { isNullOrEmty } from '@/Core/tools/string';
 import { HtmlParser } from '../templateParser';
-import { generateLifecycle } from './lifecycleGenerator';
+import { generateLifecycle } from './pipeline/lifecycle/lifecycleGenerator';
 
 export function compileComponent<
   TProps extends Record<string, unknown>,
