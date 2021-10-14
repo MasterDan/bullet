@@ -1,5 +1,6 @@
 import { ComponentPipelineBuilder } from '@/Core/component/ComponentHookBinder';
 import { IDrawArg } from './drawArg';
+import { appendMoutHook } from './onMount';
 
 /**
  * Генерируем сущность, которая позднее подпишется
@@ -9,6 +10,7 @@ import { IDrawArg } from './drawArg';
  * @returns
  */
 export function generateLifecycle(arg: IDrawArg): ComponentPipelineBuilder {
-  const builder = arg.builder;
+  const argAfterMount = appendMoutHook(arg);
+  const builder = argAfterMount.builder;
   return builder;
 }

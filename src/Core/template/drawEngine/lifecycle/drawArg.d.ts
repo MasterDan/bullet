@@ -15,7 +15,7 @@ export interface IDrawNodePipeArg {
 }
 
 export interface IDrawNodesArg {
-  node: BulletNode;
+  nodes: BulletNode[];
   context: BulletContext;
   builder: ComponentPipelineBuilder;
   parentNode?: BulletNode;

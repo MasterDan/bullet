@@ -3,7 +3,7 @@ import { BulletNode } from '../bulletNode';
 import { BulletRootNode } from '../bulletRootNode';
 import { emptyTags } from '../tags';
 
-export type BulletNodeRenderer = (content: string) => string;
+export type BulletNodeRenderer = (content?: string) => string;
 
 export function drawNode(node: BulletNode): BulletNodeRenderer {
   const attributesArray = [];
