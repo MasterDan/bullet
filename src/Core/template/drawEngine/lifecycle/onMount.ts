@@ -1,8 +1,7 @@
 import { isEmpty } from '@/core/tools/array';
-import { BulletNode } from '../../bulletNode';
 import { Pipe, Pipeline } from '../pipeline/pipeline';
 import { IDrawArg, IDrawNodeArg, IDrawNodesArg } from './drawArg';
-import { BulletNodeRenderer, drawNode } from '../../drawEngine/drawEngine';
+import { drawNode } from '../../drawEngine/drawEngine';
 
 export type EmptyBulletNodeRenderer = () => string;
 
